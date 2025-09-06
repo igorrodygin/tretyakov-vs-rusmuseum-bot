@@ -171,7 +171,8 @@ def answer_keyboard():
     ])
 
 def next_keyboard():
-    return InlineKeyboardMarkup([[InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]])
+    # return InlineKeyboardMarkup([[InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]])
+    return await play(update, context)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
@@ -264,7 +265,7 @@ async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.message.edit_caption(
         caption=caption,
         parse_mode=ParseMode.HTML,
-        reply_markup=play(update, context)
+        reply_markup=next_keyboard()
     )
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
