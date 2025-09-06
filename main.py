@@ -299,12 +299,12 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
         lines.append(f"{idx}. {name}: {correct}/{total} ({rate:.1f}%)")
     await update.effective_message.reply_text("\n".join(lines))
 
-async def start(update: Update, context):
-    keyboard = [
-        [InlineKeyboardButton("Запустить игру 🎨", web_app={"url": "https://igorrodygin.github.io/what-museum-miniapp/"})]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Добро пожаловать! Жми кнопку ниже, чтобы сыграть 👇", reply_markup=reply_markup)
+# async def start(update: Update, context):
+#     keyboard = [
+#         [InlineKeyboardButton("Запустить игру 🎨", web_app={"url": "https://igorrodygin.github.io/what-museum-miniapp/"})]
+#     ]
+#     reply_markup = InlineKeyboardMarkup(keyboard)
+#     await update.message.reply_text("Добро пожаловать! Жми кнопку ниже, чтобы сыграть 👇", reply_markup=reply_markup)
 
 
 def main():
