@@ -56,6 +56,15 @@ def db_init():
             ts INTEGER
         )
     """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS decks (
+          user_id    INTEGER PRIMARY KEY,
+          deck_json  TEXT    NOT NULL,
+          shown_json TEXT    NOT NULL
+        )
+    """)
+
     con.commit()
     con.close()
 
@@ -80,9 +89,40 @@ def load_paintings():
 
 PAINTINGS = None
 
-def pick_question() -> dict:
-    random.seed()
-    return random.choice(PAINTINGS)
+# --- Deck-based no-repeat randomizer ---
+import json as _json
+_rng = random.SystemRandom()
+
+def _new_deck(n: int):
+    deck = list(range(n))
+    _rng.shuffle(deck)
+    return deck
+
+def _load_deck(con, user_id: int):
+    cur = con.cursor()
+    row = cur.execute("SELECT deck_json, shown_json FROM decks WHERE user_id=?", (user_id,)).fetchone()
+    if row is None:
+        deck, shown = _new_deck(len(PAINTINGS)), []
+        cur.execute("INSERT INTO decks(user_id, deck_json, shown_json) VALUES(?,?,?)",
+                    (user_id, _json.dumps(deck), _json.dumps(shown)))
+        con.commit()
+        return deck, shown
+    return _json.loads(row[0]), _json.loads(row[1])
+
+def _save_deck(con, user_id: int, deck, shown):
+    con.execute("UPDATE decks SET deck_json=?, shown_json=? WHERE user_id=?",
+                (_json.dumps(deck), _json.dumps(shown), user_id))
+    con.commit()
+
+def draw_next_painting(con, user_id: int) -> dict:
+    deck, shown = _load_deck(con, user_id)
+    if not deck:
+        deck, shown = _new_deck(len(PAINTINGS)), []
+    idx = deck.pop()
+    shown.append(idx)
+    _save_deck(con, user_id, deck, shown)
+    return PAINTINGS[idx]
+
 
 def ensure_user(update: Update):
     u = update.effective_user
@@ -185,7 +225,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
-    q = pick_question()
+    con = sqlite3.connect(DB_PATH)
+    try:
+        q = draw_next_painting(con, update.effective_user.id)
+    finally:
+        con.close()
     save_session(update.effective_user.id, q)
     caption = f"🖼 <b>{q['title']}</b>\n{q['artist']}, {q['year']}\n\n<i>Из какого музея эта работа?</i>"
     try:
