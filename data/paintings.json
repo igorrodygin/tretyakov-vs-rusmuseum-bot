@@ -215,5 +215,124 @@
     "year": "1872",
     "museum": "Русский музей",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Turgenev_1872_by_Perov.jpg"
+  },
+  {
+    "title": "Взятие снежного городка",
+    "artist": "Василий Суриков",
+    "year": "1891",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_4235/index.php?lang=ru"
+  },
+  {
+    "title": "Композиция с Джокондой («Частичное затмение»)",
+    "artist": "Казимир Малевич",
+    "year": "1914",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/malevich_k.s._kompoziciya_s_dzhokondoy_chastichnoe_zatmenie._1914._zhs-440/index.php?lang=ru"
+  },
+  {
+    "title": "Зевс и Фетида",
+    "artist": "Антон Лосенко",
+    "year": "1769",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4973/index.php?lang=ru"
+  },
+  {
+    "title": "Торжественное освящение Александровской колонны",
+    "artist": "Андрей Ладюрнер",
+    "year": "1840",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/17_19/zh-5765/index.php?lang=ru"
+  },
+  {
+    "title": "Молебствие и парад (Исаакиевский собор)",
+    "artist": "Григорий Чернецов",
+    "year": "1831",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh-3604/index.php?lang=ru"
+  },
+  {
+    "title": "Картинная галерея Строгановского дворца",
+    "artist": "Николай Никитин",
+    "year": "1832",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_5126/index.php?lang=ru"
+  },
+  {
+    "title": "Царевна-Лебедь",
+    "artist": "Михаил Врубель",
+    "year": "1900",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-1828/index.php?lang=ru"
+  },
+  {
+    "title": "Л. Н. Толстой босой",
+    "artist": "Илья Репин",
+    "year": "1901",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_4010/index.php?lang=ru"
+  },
+  {
+    "title": "Лунная ночь в Крыму",
+    "artist": "Иван Айвазовский",
+    "year": "1859",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_5878/index.php?lang=ru"
+  },
+  {
+    "title": "Вид в Крыму при закате солнца",
+    "artist": "Иван Айвазовский",
+    "year": "1862",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_5963/index.php?lang=ru"
+  },
+  {
+    "title": "Русская эскадра на Севастопольском рейде",
+    "artist": "Иван Айвазовский",
+    "year": "1846",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_8237/index.php?lang=ru"
+  },
+  {
+    "title": "Бабы",
+    "artist": "Филипп Малявин",
+    "year": "1905",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_1914/index.php?lang=ru"
+  },
+  {
+    "title": "Пляшущая баба",
+    "artist": "Филипп Малявин",
+    "year": "1900-е",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-1913/index.php?lang=ru"
+  },
+  {
+    "title": "Зима",
+    "artist": "Иван Шишкин",
+    "year": "1890",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-2803/index.php?lang=ru"
+  },
+  {
+    "title": "В роще",
+    "artist": "Иван Шишкин",
+    "year": "1865",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-4126/index.php?lang=ru"
+  },
+  {
+    "title": "Дубы",
+    "artist": "Иван Шишкин",
+    "year": "1865",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-4127/index.php?lang=ru"
+  },
+  {
+    "title": "Крестьянская семья (Святое семейство)",
+    "artist": "Павел Филонов",
+    "year": "1914",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/filonov_pn_krestyanskaya_semya_svyatoe_semeystvo_1914/index.php?lang=ru"
   }
 ]
