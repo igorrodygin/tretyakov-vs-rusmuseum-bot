@@ -81,6 +81,7 @@ def load_paintings():
 PAINTINGS = None
 
 def pick_question() -> dict:
+    random.seed()
     return random.choice(PAINTINGS)
 
 def ensure_user(update: Update):
