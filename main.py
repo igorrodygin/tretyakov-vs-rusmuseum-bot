@@ -171,8 +171,7 @@ def answer_keyboard():
     ])
 
 def next_keyboard():
-    # return InlineKeyboardMarkup([[InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]])
-    return play(update, context)
+    return InlineKeyboardMarkup([[InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]])
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
@@ -182,8 +181,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Команды: /play, /stats, /top"
     )
     await update.effective_message.reply_text(text)
-
-
 
 async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
@@ -207,9 +204,11 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except BadRequest:
         msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
         context.user_data["last_error_msg_id"] = msg.message_id
+        return await play(update, context)
     except Exception:
         msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
         context.user_data["last_error_msg_id"] = msg.message_id
+        return await play(update, context)
 
 
 async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -218,42 +217,24 @@ async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = query.from_user.id
     data = query.data
 
+    # If "next" pressed (legacy), just load the next artwork
     if data == "next":
-        q = pick_question()
-        save_session(user_id, q)
-        caption = f"🖼 <b>{q['title']}</b>\n{q['artist']}, {q['year']}\n\n<i>Из какого музея эта работа?</i>"
-        try:
-            await query.message.edit_media(
-                media=InputMediaPhoto(media=q["image_url"], caption=caption, parse_mode=ParseMode.HTML),
-                reply_markup=answer_keyboard()
-            )
-            # Успешно: удаляем предыдущее сообщение об ошибке, если было
-            err_id = context.user_data.pop("last_error_msg_id", None)
-            if err_id:
-                try:
-                    await context.bot.delete_message(chat_id=query.message.chat_id, message_id=err_id)
-                except Exception:
-                    pass
-        except BadRequest:
-            msg = await query.message.reply_text("Не удалось показать картину, попробуйте ещё раз")
-            context.user_data["last_error_msg_id"] = msg.message_id
-        except Exception:
-            msg = await query.message.reply_text("Не удалось показать картину, попробуйте ещё раз")
-            context.user_data["last_error_msg_id"] = msg.message_id
-        return
+        return await play(update, context)
 
-    if not data.startswith("ans:"):
+    # Only handle answers like "ans:<museum>"
+    if not isinstance(data, str) or not data.startswith("ans:"):
         return
 
     chosen = data.split(":", 1)[1]
 
     session = get_session(user_id)
     if not session:
-        await query.edit_message_caption(
-            caption="Сессия не найдена. Нажми /play чтобы начать заново.",
-            parse_mode=ParseMode.HTML
-        )
-        return
+        # No session -> prompt to start and immediately continue
+        try:
+            await query.message.edit_caption(caption="Сессия не найдена. Нажмите /play", parse_mode=ParseMode.HTML, reply_markup=None)
+        except Exception:
+            pass
+        return await play(update, context)
 
     is_correct = (chosen == session["museum"])
     update_stats(user_id, is_correct)
@@ -262,11 +243,15 @@ async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     note = (" " + session["note"]) if session.get("note") else ""
     caption = f"🖼 <b>{session['title']}</b>\n{session['artist']}, {session['year']}\n\n{verdict}{note}"
 
-    await query.message.edit_caption(
-        caption=caption,
-        parse_mode=ParseMode.HTML,
-        reply_markup=next_keyboard()
-    )
+    # Show verdict on the same message (remove the old answer buttons)
+    try:
+        await query.message.edit_caption(caption=caption, parse_mode=ParseMode.HTML, reply_markup=None)
+    except Exception:
+        pass
+
+    # Immediately load the next artwork (no 'Еще картину' button)
+    return await play(update, context)
+
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
@@ -283,7 +268,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(
         f"Твоя статистика:\nПравильных ответов: {correct}/{total} ({acc:.1f}%)\nСерия подряд: {streak}"
     )
-
+    
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     rows = leaderboard_top()
     if not rows:
