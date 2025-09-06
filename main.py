@@ -172,7 +172,7 @@ def answer_keyboard():
 
 def next_keyboard():
     # return InlineKeyboardMarkup([[InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]])
-    return await play(update, context)
+    return play(update, context)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
