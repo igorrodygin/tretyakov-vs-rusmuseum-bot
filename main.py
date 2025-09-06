@@ -264,7 +264,7 @@ async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.message.edit_caption(
         caption=caption,
         parse_mode=ParseMode.HTML,
-        reply_markup=next_keyboard()
+        reply_markup=play()
     )
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
