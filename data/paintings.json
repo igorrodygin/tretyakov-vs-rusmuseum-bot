@@ -173,5 +173,50 @@
     "year": "1827",
     "museum": "Третьяковская галерея",
     "image_url": "https://artsandculture.google.com/asset/portrait-of-a-s-pushkin-orest-kiprensky/GwHXH-oqLPXL8g"
+  },
+  [
+  {
+    "title": "Последний день Помпеи",
+    "artist": "Карл Брюллов",
+    "year": "1833",
+    "museum": "Русский музей",
+    "image_url": "https://commons.wikimedia.org/wiki/File%3AKarl_Briullov%2C_The_Last_Day_of_Pompeii_%281827%E2%80%931833%29.jpg"
+  },
+  {
+    "title": "Девятый вал",
+    "artist": "Иван Айвазовский",
+    "year": "1850",
+    "museum": "Русский музей",
+    "image_url": "https://commons.wikimedia.org/wiki/File%3AHovhannes_Aivazovsky_-_The_Ninth_Wave_-_Google_Art_Project.jpg"
+  },
+  {
+    "title": "Бурлаки на Волге",
+    "artist": "Илья Репин",
+    "year": "1870–1873",
+    "museum": "Русский музей",
+    "image_url": "https://commons.wikimedia.org/wiki/File%3AIlya_Repin_-_Barge_Haulers_on_the_Volga_-_Google_Art_Project.jpg"
+  },
+  {
+    "title": "Витязь на распутье",
+    "artist": "Виктор Васнецов",
+    "year": "1882",
+    "museum": "Русский музей",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/19-v_2h_Vasnetsov.jpg/2880px-19-v_2h_Vasnetsov.jpg"
+  },
+  {
+    "title": "Лунная ночь на Днепре",
+    "artist": "Архип Куинджи",
+    "year": "1880",
+    "museum": "Русский музей",
+    "image_url": "https://commons.wikimedia.org/wiki/File%3AKuindzhi_Moonlit_night_on_the_Dnieper_1880_grm_x2.jpg"
+  },
+  {
+    "title": "Портрет писателя Ивана Тургенева",
+    "artist": "Василий Перов",
+    "year": "1872",
+    "museum": "Русский музей",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Turgenev_1872_by_Perov.jpg"
   }
+]
+
 ]
