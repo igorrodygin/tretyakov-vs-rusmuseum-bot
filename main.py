@@ -4,6 +4,33 @@ import random
 import time
 import sqlite3
 
+from datetime import datetime, timezone
+
+DAILY_LIMIT = 20  # дневной лимит показов карточек на пользователя
+
+def _today_key() -> str:
+    return datetime.now(timezone.utc).strftime('%Y%m%d')
+
+def get_used_today(con: sqlite3.Connection, user_id: int) -> int:
+    day = _today_key()
+    row = con.execute(
+        'SELECT used FROM daily_quota WHERE user_id=? AND day=?',
+        (user_id, day)
+    ).fetchone()
+    return row[0] if row else 0
+
+def inc_used_today(con: sqlite3.Connection, user_id: int, delta: int = 1) -> None:
+    day = _today_key()
+    con.execute(
+        """
+        INSERT INTO daily_quota(user_id, day, used)
+        VALUES(?,?,?)
+        ON CONFLICT(user_id, day) DO UPDATE SET used = daily_quota.used + excluded.used
+        """,
+        (user_id, day, delta),
+    )
+    con.commit()
+
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, InputMediaPhoto
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
@@ -225,36 +252,42 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
+    user_id = update.effective_user.id
     con = sqlite3.connect(DB_PATH)
     try:
-        q = draw_next_painting(con, update.effective_user.id)
+        used = get_used_today(con, user_id)
+        if used >= DAILY_LIMIT:
+            await stats(update, context)
+            await update.effective_message.reply_text("На сегодня всё. Приходите завтра!")
+            return
+        q = draw_next_painting(con, user_id)
+        inc_used_today(con, user_id, 1)
     finally:
         con.close()
-    save_session(update.effective_user.id, q)
+    save_session(user_id, q)
     caption = f"🖼 <b>{q['title']}</b>\n{q['artist']}, {q['year']}\n\n<i>Из какого музея эта работа?</i>"
-    try:
-        await update.effective_message.reply_photo(
-            photo=q["image_url"],
-            caption=caption,
-            parse_mode=ParseMode.HTML,
-            reply_markup=answer_keyboard()
-        )
-        # Успешно: удаляем предыдущее сообщение об ошибке, если было
-        err_id = context.user_data.pop("last_error_msg_id", None)
-        if err_id:
-            try:
-                await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=err_id)
-            except Exception:
-                pass
-    except BadRequest:
-        msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
-        context.user_data["last_error_msg_id"] = msg.message_id
-        return await play(update, context)
-    except Exception:
-        msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
-        context.user_data["last_error_msg_id"] = msg.message_id
-        return await play(update, context)
-
+        try:
+            await update.effective_message.reply_photo(
+                photo=q["image_url"],
+                caption=caption,
+                parse_mode=ParseMode.HTML,
+                reply_markup=answer_keyboard()
+            )
+            # Успешно: удаляем предыдущее сообщение об ошибке, если было
+            err_id = context.user_data.pop("last_error_msg_id", None)
+            if err_id:
+                try:
+                    await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=err_id)
+                except Exception:
+                    pass
+        except BadRequest:
+            msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
+            context.user_data["last_error_msg_id"] = msg.message_id
+            return await play(update, context)
+        except Exception:
+            msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
+            context.user_data["last_error_msg_id"] = msg.message_id
+            return await play(update, context)
 
 async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
