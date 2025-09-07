@@ -11,19 +11,7 @@ DAILY_LIMIT = 20  # дневной лимит показов карточек н
 def _today_key() -> str:
     return datetime.now(timezone.utc).strftime('%Y%m%d')
 
-
-def ensure_daily_quota_table(con: sqlite3.Connection) -> None:
-    con.execute("""
-        CREATE TABLE IF NOT EXISTS daily_quota(
-            user_id INTEGER NOT NULL,
-            day TEXT NOT NULL,
-            used INTEGER DEFAULT 0,
-            PRIMARY KEY (user_id, day)
-        )
-    """)
-
 def get_used_today(con: sqlite3.Connection, user_id: int) -> int:
-    ensure_daily_quota_table(con)
     day = _today_key()
     row = con.execute(
         'SELECT used FROM daily_quota WHERE user_id=? AND day=?',
@@ -32,7 +20,6 @@ def get_used_today(con: sqlite3.Connection, user_id: int) -> int:
     return row[0] if row else 0
 
 def inc_used_today(con: sqlite3.Connection, user_id: int, delta: int = 1) -> None:
-    ensure_daily_quota_table(con)
     day = _today_key()
     con.execute(
         """
@@ -102,6 +89,15 @@ def db_init():
           user_id    INTEGER PRIMARY KEY,
           deck_json  TEXT    NOT NULL,
           shown_json TEXT    NOT NULL
+        )
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS daily_quota(
+            user_id INTEGER NOT NULL,
+            day TEXT NOT NULL,
+            used INTEGER DEFAULT 0,
+            PRIMARY KEY (user_id, day)
         )
     """)
 
