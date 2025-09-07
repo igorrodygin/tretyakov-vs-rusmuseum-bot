@@ -266,28 +266,28 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
         con.close()
     save_session(user_id, q)
     caption = f"🖼 <b>{q['title']}</b>\n{q['artist']}, {q['year']}\n\n<i>Из какого музея эта работа?</i>"
-        try:
-            await update.effective_message.reply_photo(
-                photo=q["image_url"],
-                caption=caption,
-                parse_mode=ParseMode.HTML,
-                reply_markup=answer_keyboard()
-            )
-            # Успешно: удаляем предыдущее сообщение об ошибке, если было
-            err_id = context.user_data.pop("last_error_msg_id", None)
-            if err_id:
-                try:
-                    await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=err_id)
-                except Exception:
-                    pass
-        except BadRequest:
-            msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
-            context.user_data["last_error_msg_id"] = msg.message_id
-            return await play(update, context)
-        except Exception:
-            msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
-            context.user_data["last_error_msg_id"] = msg.message_id
-            return await play(update, context)
+    try:
+        await update.effective_message.reply_photo(
+            photo=q["image_url"],
+            caption=caption,
+            parse_mode=ParseMode.HTML,
+            reply_markup=answer_keyboard()
+        )
+        # Успешно: удаляем предыдущее сообщение об ошибке, если было
+        err_id = context.user_data.pop("last_error_msg_id", None)
+        if err_id:
+            try:
+                await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=err_id)
+            except Exception:
+                pass
+    except BadRequest:
+        msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
+        context.user_data["last_error_msg_id"] = msg.message_id
+        return await play(update, context)
+    except Exception:
+        msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
+        context.user_data["last_error_msg_id"] = msg.message_id
+        return await play(update, context)
 
 async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
