@@ -131,7 +131,7 @@ _rng = random.SystemRandom()
 
 def _new_deck(n: int):
     deck = list(range(n))
-    _rng.shuffle(deck)
+    ### _rng.shuffle(deck) ## Do not shuffle
     return deck
 
 def _load_deck(con, user_id: int):
