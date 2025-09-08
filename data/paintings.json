@@ -1,583 +1,583 @@
 [
-   {
-      "title":"Богатыри",
-      "artist":"Виктор Васнецов",
-      "year":"1898",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/bogatyri-viktor-vasnetsov/GgFy94lN-r6DXw"
-   },
-   {
-      "title":"Аленушка",
-      "artist":"Виктор Васнецов",
-      "year":"1881",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/alyonushka/BwEnxZIyvoQ9kw"
-   },
-   {
-      "title":"Боярыня Морозова",
-      "artist":"Василий Суриков",
-      "year":"1887",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/boyarina-morozova-vasily-surikov/ogHGQgd1Ws9Htg"
-   },
-   {
-      "title":"Утро стрелецкой казни",
-      "artist":"Василий Суриков",
-      "year":"1881",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/the-morning-of-the-execution-of-the-streltsy-vasily-surikov/xAGX5DyRl-AyWw"
-   },
-   {
-      "title":"Крестный ход в Курской губернии",
-      "artist":"Илья Репин",
-      "year":"1880–1883",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/religious-procession-in-kursk-gubernia-ilya-repin/hwHNI1pexsKRvw"
-   },
-   {
-      "title":"Девушка с персиками (Портрет В.С. Мамонтовой)",
-      "artist":"Валентин Серов",
-      "year":"1887",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/girl-with-peaches-portrait-of-v-s-mamontova/vgFS_-o4tXr4Rw"
-   },
-   {
-      "title":"Грачи прилетели",
-      "artist":"Алексей Саврасов",
-      "year":"1871",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/rooks-have-returned-aleksey-savrasov/qgEUs-kiMGydOg"
-   },
-   {
-      "title":"Христос в пустыне",
-      "artist":"Иван Крамской",
-      "year":"1872",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/christ-in-the-wilderness-ivan-kramskoy/uwEOJTS-uQb5ww"
-   },
-   {
-      "title":"Иван Грозный и сын его Иван 16 ноября 1581 года",
-      "artist":"Илья Репин",
-      "year":"1885",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://upload.wikimedia.org/wikipedia/commons/3/33/Iv%C3%A1n_el_Terrible_y_su_hijo%2C_por_Ili%C3%A1_Repin.jpg"
-   },
-   {
-      "title":"Композиция VII",
-      "artist":"Василий Кандинский",
-      "year":"1913",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/composition-vii-vasily-kandinsky/CQHOKgpWcL_UPA"
-   },
-   {
-      "title":"Демон (сидящий)",
-      "artist":"Михаил Врубель",
-      "year":"1890",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/demon-sitting-mikhail-vrubel/EQFjnAisIfWvAQ"
-   },
-   {
-      "title":"Троица",
-      "artist":"Андрей Рублёв",
-      "year":"1425–1427",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/holy-trinity-troitsa-andrey-rublev/xAHfUdaiKn8EBA"
-   },
-   {
-      "title":"Портрет Екатерины II",
-      "artist":"Фёдор Рокотов",
-      "year":"1763",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/portrait-of-catherine-ii-fedor-rokotov/agG0oHahaTfZkA"
-   },
-   {
-      "title":"Портрет Фёдора Достоевского",
-      "artist":"Василий Перов",
-      "year":"1872",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/portrait-of-fedor-dostoyevsky-vasily-perov/kgHBFHS7SpcayQ"
-   },
-   {
-      "title":"Портрет М.П. Мусоргского",
-      "artist":"Илья Репин",
-      "year":"1881",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/modest-mussorgsky-ilya-repin/wAEto1rus6nXFQ"
-   },
-   {
-      "title":"Неравный брак",
-      "artist":"Василий Пукирев",
-      "year":"1862",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/the-unequal-marriage-vasily-pukirev/1AE1sDnuGsQ7bQ"
-   },
-   {
-      "title":"Апофеоз войны",
-      "artist":"Василий Верещагин",
-      "year":"1871",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/the-apotheosis-of-war-vasily-vereshchagin/RAHHXrpeZGsYyw"
-   },
-   {
-      "title":"Рожь",
-      "artist":"Иван Шишкин",
-      "year":"1878",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/rye-ivan-shishkin/iAEOUlRJYj2FAg"
-   },
-   {
-      "title":"Портрет П.М. Третьякова",
-      "artist":"Илья Репин",
-      "year":"1901",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/portrait-of-pavel-tretyakov-ilya-repin/vAFa563WaWaGIA"
-   },
-   {
-      "title":"Похищение Европы",
-      "artist":"Валентин Серов",
-      "year":"1910",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/the-rape-of-europa-valentin-serov/uAF7WK6ouSPg5g"
-   },
-   {
-      "title":"Московский дворик",
-      "artist":"Василий Поленов",
-      "year":"1878",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/moscow-patio-vasily-polenov/EwFgf3K9mAQuyg"
-   },
-   {
-      "title":"Портрет Генриетты Гиршман",
-      "artist":"Валентин Серов",
-      "year":"1907",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/portrait-of-henriette-girshman-valentin-serov/awE5Mk2d3xtvhA"
-   },
-   {
-      "title":"Явление Христа народу (Явление Мессии)",
-      "artist":"Александр Иванов",
-      "year":"1837–1857",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/the-apparition-of-christ-to-the-people-the-apparition-of-the-messiah-aleksander-ivanov/lgGqUffODe21kA"
-   },
-   {
-      "title":"Портрет А.С. Пушкина",
-      "artist":"Орест Кипренский",
-      "year":"1827",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://artsandculture.google.com/asset/portrait-of-a-s-pushkin-orest-kiprensky/GwHXH-oqLPXL8g"
-   },
-   {
-      "title":"Последний день Помпеи",
-      "artist":"Карл Брюллов",
-      "year":"1833",
-      "museum":"Русский музей",
-      "image_url":"https://commons.wikimedia.org/wiki/File%3AKarl_Briullov%2C_The_Last_Day_of_Pompeii_%281827%E2%80%931833%29.jpg"
-   },
-   {
-      "title":"Девятый вал",
-      "artist":"Иван Айвазовский",
-      "year":"1850",
-      "museum":"Русский музей",
-      "image_url":"https://commons.wikimedia.org/wiki/File%3AHovhannes_Aivazovsky_-_The_Ninth_Wave_-_Google_Art_Project.jpg"
-   },
-   {
-      "title":"Бурлаки на Волге",
-      "artist":"Илья Репин",
-      "year":"1870–1873",
-      "museum":"Русский музей",
-      "image_url":"https://commons.wikimedia.org/wiki/File%3AIlya_Repin_-_Barge_Haulers_on_the_Volga_-_Google_Art_Project.jpg"
-   },
-   {
-      "title":"Витязь на распутье",
-      "artist":"Виктор Васнецов",
-      "year":"1882",
-      "museum":"Русский музей",
-      "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/19-v_2h_Vasnetsov.jpg/2880px-19-v_2h_Vasnetsov.jpg"
-   },
-   {
-      "title":"Лунная ночь на Днепре",
-      "artist":"Архип Куинджи",
-      "year":"1880",
-      "museum":"Русский музей",
-      "image_url":"https://commons.wikimedia.org/wiki/File%3AKuindzhi_Moonlit_night_on_the_Dnieper_1880_grm_x2.jpg"
-   },
-   {
-      "title":"Портрет писателя Ивана Тургенева",
-      "artist":"Василий Перов",
-      "year":"1872",
-      "museum":"Русский музей",
-      "image_url":"https://upload.wikimedia.org/wikipedia/commons/e/ee/Turgenev_1872_by_Perov.jpg"
-   },
-   {
-      "title":"Взятие снежного городка",
-      "artist":"Василий Суриков",
-      "year":"1891",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_4235/index.php?lang=ru"
-   },
-   {
-      "title":"Композиция с Джокондой («Частичное затмение»)",
-      "artist":"Казимир Малевич",
-      "year":"1914",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/malevich_k.s._kompoziciya_s_dzhokondoy_chastichnoe_zatmenie._1914._zhs-440/index.php?lang=ru"
-   },
-   {
-      "title":"Зевс и Фетида",
-      "artist":"Антон Лосенко",
-      "year":"1769",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4973/index.php?lang=ru"
-   },
-   {
-      "title":"Торжественное освящение Александровской колонны",
-      "artist":"Андрей Ладюрнер",
-      "year":"1840",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/17_19/zh-5765/index.php?lang=ru"
-   },
-   {
-      "title":"Молебствие и парад (Исаакиевский собор)",
-      "artist":"Григорий Чернецов",
-      "year":"1831",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh-3604/index.php?lang=ru"
-   },
-   {
-      "title":"Картинная галерея Строгановского дворца",
-      "artist":"Николай Никитин",
-      "year":"1832",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_5126/index.php?lang=ru"
-   },
-   {
-      "title":"Царевна-Лебедь",
-      "artist":"Михаил Врубель",
-      "year":"1900",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-1828/index.php?lang=ru"
-   },
-   {
-      "title":"Л. Н. Толстой босой",
-      "artist":"Илья Репин",
-      "year":"1901",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_4010/index.php?lang=ru"
-   },
-   {
-      "title":"Лунная ночь в Крыму",
-      "artist":"Иван Айвазовский",
-      "year":"1859",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_5878/index.php?lang=ru"
-   },
-   {
-      "title":"Вид в Крыму при закате солнца",
-      "artist":"Иван Айвазовский",
-      "year":"1862",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_5963/index.php?lang=ru"
-   },
-   {
-      "title":"Русская эскадра на Севастопольском рейде",
-      "artist":"Иван Айвазовский",
-      "year":"1846",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_8237/index.php?lang=ru"
-   },
-   {
-      "title":"Бабы",
-      "artist":"Филипп Малявин",
-      "year":"1905",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_1914/index.php?lang=ru"
-   },
-   {
-      "title":"Пляшущая баба",
-      "artist":"Филипп Малявин",
-      "year":"1900-е",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-1913/index.php?lang=ru"
-   },
-   {
-      "title":"Зима",
-      "artist":"Иван Шишкин",
-      "year":"1890",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-2803/index.php?lang=ru"
-   },
-   {
-      "title":"В роще",
-      "artist":"Иван Шишкин",
-      "year":"1865",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-4126/index.php?lang=ru"
-   },
-   {
-      "title":"Дубы",
-      "artist":"Иван Шишкин",
-      "year":"1865",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-4127/index.php?lang=ru"
-   },
-   {
-      "title":"Крестьянская семья (Святое семейство)",
-      "artist":"Павел Филонов",
-      "year":"1914",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/filonov_pn_krestyanskaya_semya_svyatoe_semeystvo_1914/index.php?lang=ru"
-   },
-   {
-      "title":"Мика Морозов",
-      "artist":"Серов Валентин",
-      "year":"1901",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/26/41df4faec523b3541b7f2dd0460b5c48/thumb/2dbec46faede2a9a4b22bdae4e10f8bb_x1.jpg"
-   },
-   {
-      "title":"Портрет Микеланджело Ланчи",
-      "artist":"Брюллов Карл",
-      "year":"1851",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/22/5019226f93cb758b3969809d21efe269/thumb/88cd2a4e1ecdd9010c2e6b52cedcf477_x1.jpg"
-   },
-   {
-      "title":"Неизвестная",
-      "artist":"Крамской Иван",
-      "year":"1883",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/24/c7fff3e7d394a9e47ea1a9904ded8f1c/thumb/52c30579545fc922b186d7758c414277_x1.jpg"
-   },
-   {
-      "title":"Портрет поэта А.С. Пушкина",
-      "artist":"Кипренский Орест",
-      "year":"1827",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/23/29a62f760b1397406bf213945f2e403a/thumb/62583a0cf7eaa184d54ec8b30d525fbb_x1.jpg"
-   },
-   {
-      "title":"Кружевница",
-      "artist":"Тропинин Василий",
-      "year":"1823",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/23/c48ebfb2dd36be0637dffa357103c2e5/thumb/14db62200d8bf46551aa214accafe1df_x2.png"
-   },
-   {
-      "title":"Портрет В.И. Мухиной",
-      "artist":"Нестеров Михаил",
-      "year":"1940",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/30/37d2fe44edf3c43f0419e55c6c37ab35/thumb/5719416b1af12b2653a222faf5792252_x1.jpg"
-   },
-   {
-      "title":"Дама в голубом",
-      "artist":"Сомов Константин",
-      "year":"1897-1900",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/26/252909c0b6a9f015b3e2c45ebd8497ee/thumb/0b05e2f5a10750f6fc431fe91cd28aa7_x1.jpg"
-   },
-   {
-      "title":"Всадница",
-      "artist":"Брюллов Карл",
-      "year":"1832",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/22/6827c3dfc19ebbb4cdf05f2dbc7ca4a1/thumb/fe6cf670c2598ffe3cefad2e23017e3d_x1.jpg"
-   },
-   {
-      "title":"Портрет В.О. Гиршман",
-      "artist":"Серов Валентин",
-      "year":"1911",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/26/e4ab8a01cf2919ad0ec21f66acdfd4bb/thumb/179519adc1cc918b7463b748e291278c_x1.jpg"
-   },
-   {
-      "title":"Портрет Ф.И. Шаляпина в роли Олоферна",
-      "artist":"Головин Александр",
-      "year":"1911",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/25/0c1e32a91fdc3159cd179cce8ad2232c/thumb/871a84d1202eb7690577cdadfee758d7_x1.jpg"
-   },
-   {
-      "title":"Девочка в маковом венке, с гвоздикой в руке (Мариучча)",
-      "artist":"Кипренский Орест",
-      "year":"1819",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/23/ee5bdcbd453676852ac8a2045cfebd57/thumb/7873b66ca1d39eb8603c467fa05cfe86_x1.jpg"
-   },
-   {
-      "title":"Лизынька и Дашинька",
-      "artist":"Боровиковский Владимир",
-      "year":"1794",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/21/ddcee4fa5434c5a02ecb7892cd40f195/thumb/734dc5be2cd1584226fe704b4c382a22_x1.jpg"
-   },
-   {
-      "title":"Портрет Т.А. Мамонтовой",
-      "artist":"Васнецов Виктор",
-      "year":"1884",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/23/50ad7479c41d0fd8dd637a5a2f7b3672/thumb/d4251909b19459f8373c293b5f21eb87_x1.j"
-   },
-   {
-      "title":"Портрет Екатерины II в виде законодательницы в храме богини Правосудия",
-      "artist":"Левицкий Дмитрий",
-      "year":"Начало 1790-х",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/22/40518a43aef9b4965c54107896934822/thumb/d354802156b96be5b62ad51cae8c3c45_x1.jpg"
-   },
-   {
-      "title":"Портрет Е.И. Киркальди",
-      "artist":"Машков Илья",
-      "year":"1910",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/26/3eab4f7a37f59238289a20858c81ac75/thumb/a687f78b9842c87225e74921765feb1b_x1.jpg"
-   },
-   {
-      "title":"Зима (Надя)",
-      "artist":"Истомин Константин",
-      "year":"1928",
-      "museum":"Третьяковская галерея",
-      "image_url":"https://cdn.tretyakov.ru/mytretyakov/2f/6211ea42eedfd50f0caa0e8cad39841b/thumb/3eab15ca29e2eda700eee12aba312805_x1.jpg"
-   },
-   {
-      "title":"Волна",
-      "artist":"Айвазовский Иван",
-      "year":"1889",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_2200/2198_mainfoto_03.jpg"
-   },
-   {
-      "title":"Девятый вал",
-      "artist":"Айвазовский Иван",
-      "year":"1850",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_2202/2141_mainfoto_03.jpg"
-   },
-   {
-      "title":"Бриг «Меркурий» после победы над двумя турецкими судами встречается с русской эскадрой",
-      "artist":"Айвазовский Иван",
-      "year":"1848",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/17_19/ayvazovskiy_ik_brig_merkuriy_1848_zh_2209/5529_mainfoto_03.jpg"
-   },
-   {
-      "title":"Вид Константинополя",
-      "artist":"Айвазовский Иван",
-      "year":"1846",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/17_19/ayvazovskiy_ik_vid_konstantinopolya_1846_zh_1787/5517_mainfoto_03.jpg"
-   },
-   {
-      "title":"Вид Одессы в лунную ночь",
-      "artist":"Айвазовский Иван",
-      "year":"1846",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_2201/2199_mainfoto_03.jpg"
-   },
-   {
-      "title":"Русская эскадра на Севастопольском рейде",
-      "artist":"Айвазовский Иван",
-      "year":"1846",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_8237/1993_mainfoto_03.jpg"
-   },
-   {
-      "title":"Вид Казанского собора в Петербурге",
-      "artist":"Алексеев Фёдор",
-      "year":"Не ранее 1810",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_5049/2116_mainfoto_03.jpg"
-   },
-   {
-      "title":"Вид на Михайловский замок в Петербурге со стороны Фонтанки",
-      "artist":"Алексеев Фёдор",
-      "year":"Ок.1800",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/17_19/alekseev_fya_vid_na_mih_zamok_s_fontanki_ok1800_zh_3293/3715_mainfoto_03.jpg"
-   },
-   {
-      "title":"Вид на Михайловский замок и площадь Коннетабля в Петербурге",
-      "artist":"Алексеев Фёдор",
-      "year":"1800",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_3294/2147_mainfoto_03.jpg"
-   },
-   {
-      "title":"Портрет А. А. Ахматовой",
-      "artist":"Альтман Натан",
-      "year":"1914",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zhb-1311/1676_mainfoto_03.jpg"
-   },
-   {
-      "title":"Портрет М. А. Румянцевой",
-      "artist":"Антропов Алексей",
-      "year":"1764",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4920/1943_mainfoto_03.jpg"
-   },
-   {
-      "title":"Портрет графини А. К. Воронцовой (урожденной Скавронской)",
-      "artist":"Антропов Алексей",
-      "year":"1763",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4919/1971_mainfoto_03.jpg"
-   },
-   {
-      "title":"Портрет Петра III",
-      "artist":"Антропов Алексей",
-      "year":"1762",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/17_19/antropov_ap_portret_petra_iii_okolo_1762_zh_5822/3731_mainfoto_03.jpg"
-   },
-   {
-      "title":"Портрет Петра III",
-      "artist":"Антропов Алексей",
-      "year":"1762",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/antropov_portrait_peter3/1812_mainfoto_03.jpg"
-   },
-   {
-      "title":"Портрет княгини Е. А. Лобановой-Ростовской",
-      "artist":"Аргунов Иван",
-      "year":"1754",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4927/1969_mainfoto_03.jpg"
-   },
-   {
-      "title":"Подвиг гренадера лейб-гвардии Финляндского полка Леонтия Коренного в битве под Лейпцигом в 1813 г",
-      "artist":"Бабаев Полидор",
-      "year":"1846",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/17_19/babaev_pi_podvig_grenadera_l_korennogo_v_bitve_pod_leypcigom_v_1813_g_1846_zh_3561/4417_mainfoto_03.jpg"
-   },
-   {
-      "title":"Древний ужас (Terror Antiquus)",
-      "artist":"Бакст Лев",
-      "year":"1908",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_8135/2053_mainfoto_03.jpg"
-   },
-   {
-      "title":"Портрет С. П. Дягилева с няней",
-      "artist":"Бакст Лев",
-      "year":"1906",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_2117/2275_mainfoto_03.jpg"
-   },
-   {
-      "title":"Ужин",
-      "artist":"Бакст Лев",
-      "year":"1902",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_2118/2274_mainfoto_03.jpg"
-   },
-   {
-      "title":"Фиорд Христиания",
-      "artist":"Баранов-Россинэ Владимир",
-      "year":"1915",
-      "museum":"Русский музей",
-      "image_url":"https://rusmuseumvrm.ru/data/collections/painting/19_20/baranov_rossine_vd_fiord_hristianiya_1915_zhb1415/2932_mainfoto_03.jpg"
-   }
+  {
+    "title": "Мика Морозов",
+    "artist": "Серов Валентин",
+    "year": "1901",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/26/41df4faec523b3541b7f2dd0460b5c48/thumb/2dbec46faede2a9a4b22bdae4e10f8bb_x1.jpg"
+  },
+  {
+    "title": "Зима (Надя)",
+    "artist": "Истомин Константин",
+    "year": "1928",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/2f/6211ea42eedfd50f0caa0e8cad39841b/thumb/3eab15ca29e2eda700eee12aba312805_x1.jpg"
+  },
+  {
+    "title": "Торжественное освящение Александровской колонны",
+    "artist": "Андрей Ладюрнер",
+    "year": "1840",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/17_19/zh-5765/index.php?lang=ru"
+  },
+  {
+    "title": "Крестьянская семья (Святое семейство)",
+    "artist": "Павел Филонов",
+    "year": "1914",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/filonov_pn_krestyanskaya_semya_svyatoe_semeystvo_1914/index.php?lang=ru"
+  },
+  {
+    "title": "Портрет Ф.И. Шаляпина в роли Олоферна",
+    "artist": "Головин Александр",
+    "year": "1911",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/25/0c1e32a91fdc3159cd179cce8ad2232c/thumb/871a84d1202eb7690577cdadfee758d7_x1.jpg"
+  },
+  {
+    "title": "Неравный брак",
+    "artist": "Василий Пукирев",
+    "year": "1862",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/the-unequal-marriage-vasily-pukirev/1AE1sDnuGsQ7bQ"
+  },
+  {
+    "title": "Иван Грозный и сын его Иван 16 ноября 1581 года",
+    "artist": "Илья Репин",
+    "year": "1885",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Iv%C3%A1n_el_Terrible_y_su_hijo%2C_por_Ili%C3%A1_Repin.jpg"
+  },
+  {
+    "title": "Вид в Крыму при закате солнца",
+    "artist": "Иван Айвазовский",
+    "year": "1862",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_5963/index.php?lang=ru"
+  },
+  {
+    "title": "Портрет Е.И. Киркальди",
+    "artist": "Машков Илья",
+    "year": "1910",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/26/3eab4f7a37f59238289a20858c81ac75/thumb/a687f78b9842c87225e74921765feb1b_x1.jpg"
+  },
+  {
+    "title": "Взятие снежного городка",
+    "artist": "Василий Суриков",
+    "year": "1891",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_4235/index.php?lang=ru"
+  },
+  {
+    "title": "Вид Константинополя",
+    "artist": "Айвазовский Иван",
+    "year": "1846",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/17_19/ayvazovskiy_ik_vid_konstantinopolya_1846_zh_1787/5517_mainfoto_03.jpg"
+  },
+  {
+    "title": "Зевс и Фетида",
+    "artist": "Антон Лосенко",
+    "year": "1769",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4973/index.php?lang=ru"
+  },
+  {
+    "title": "Волна",
+    "artist": "Айвазовский Иван",
+    "year": "1889",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_2200/2198_mainfoto_03.jpg"
+  },
+  {
+    "title": "Неизвестная",
+    "artist": "Крамской Иван",
+    "year": "1883",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/24/c7fff3e7d394a9e47ea1a9904ded8f1c/thumb/52c30579545fc922b186d7758c414277_x1.jpg"
+  },
+  {
+    "title": "Вид на Михайловский замок и площадь Коннетабля в Петербурге",
+    "artist": "Алексеев Фёдор",
+    "year": "1800",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_3294/2147_mainfoto_03.jpg"
+  },
+  {
+    "title": "Портрет Екатерины II",
+    "artist": "Фёдор Рокотов",
+    "year": "1763",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/portrait-of-catherine-ii-fedor-rokotov/agG0oHahaTfZkA"
+  },
+  {
+    "title": "Бриг «Меркурий» после победы над двумя турецкими судами встречается с русской эскадрой",
+    "artist": "Айвазовский Иван",
+    "year": "1848",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/17_19/ayvazovskiy_ik_brig_merkuriy_1848_zh_2209/5529_mainfoto_03.jpg"
+  },
+  {
+    "title": "Царевна-Лебедь",
+    "artist": "Михаил Врубель",
+    "year": "1900",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-1828/index.php?lang=ru"
+  },
+  {
+    "title": "Портрет А.С. Пушкина",
+    "artist": "Орест Кипренский",
+    "year": "1827",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/portrait-of-a-s-pushkin-orest-kiprensky/GwHXH-oqLPXL8g"
+  },
+  {
+    "title": "Девочка в маковом венке, с гвоздикой в руке (Мариучча)",
+    "artist": "Кипренский Орест",
+    "year": "1819",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/23/ee5bdcbd453676852ac8a2045cfebd57/thumb/7873b66ca1d39eb8603c467fa05cfe86_x1.jpg"
+  },
+  {
+    "title": "Древний ужас (Terror Antiquus)",
+    "artist": "Бакст Лев",
+    "year": "1908",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_8135/2053_mainfoto_03.jpg"
+  },
+  {
+    "title": "Аленушка",
+    "artist": "Виктор Васнецов",
+    "year": "1881",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/alyonushka/BwEnxZIyvoQ9kw"
+  },
+  {
+    "title": "Портрет Екатерины II в виде законодательницы в храме богини Правосудия",
+    "artist": "Левицкий Дмитрий",
+    "year": "Начало 1790-х",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/22/40518a43aef9b4965c54107896934822/thumb/d354802156b96be5b62ad51cae8c3c45_x1.jpg"
+  },
+  {
+    "title": "Русская эскадра на Севастопольском рейде",
+    "artist": "Иван Айвазовский",
+    "year": "1846",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_8237/index.php?lang=ru"
+  },
+  {
+    "title": "Пляшущая баба",
+    "artist": "Филипп Малявин",
+    "year": "1900-е",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-1913/index.php?lang=ru"
+  },
+  {
+    "title": "Подвиг гренадера лейб-гвардии Финляндского полка Леонтия Коренного в битве под Лейпцигом в 1813 г",
+    "artist": "Бабаев Полидор",
+    "year": "1846",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/17_19/babaev_pi_podvig_grenadera_l_korennogo_v_bitve_pod_leypcigom_v_1813_g_1846_zh_3561/4417_mainfoto_03.jpg"
+  },
+  {
+    "title": "Портрет графини А. К. Воронцовой (урожденной Скавронской)",
+    "artist": "Антропов Алексей",
+    "year": "1763",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4919/1971_mainfoto_03.jpg"
+  },
+  {
+    "title": "Портрет А. А. Ахматовой",
+    "artist": "Альтман Натан",
+    "year": "1914",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zhb-1311/1676_mainfoto_03.jpg"
+  },
+  {
+    "title": "Похищение Европы",
+    "artist": "Валентин Серов",
+    "year": "1910",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/the-rape-of-europa-valentin-serov/uAF7WK6ouSPg5g"
+  },
+  {
+    "title": "Московский дворик",
+    "artist": "Василий Поленов",
+    "year": "1878",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/moscow-patio-vasily-polenov/EwFgf3K9mAQuyg"
+  },
+  {
+    "title": "Бурлаки на Волге",
+    "artist": "Илья Репин",
+    "year": "1870–1873",
+    "museum": "Русский музей",
+    "image_url": "https://commons.wikimedia.org/wiki/File%3AIlya_Repin_-_Barge_Haulers_on_the_Volga_-_Google_Art_Project.jpg"
+  },
+  {
+    "title": "Портрет П.М. Третьякова",
+    "artist": "Илья Репин",
+    "year": "1901",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/portrait-of-pavel-tretyakov-ilya-repin/vAFa563WaWaGIA"
+  },
+  {
+    "title": "Портрет В.И. Мухиной",
+    "artist": "Нестеров Михаил",
+    "year": "1940",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/30/37d2fe44edf3c43f0419e55c6c37ab35/thumb/5719416b1af12b2653a222faf5792252_x1.jpg"
+  },
+  {
+    "title": "Зима",
+    "artist": "Иван Шишкин",
+    "year": "1890",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-2803/index.php?lang=ru"
+  },
+  {
+    "title": "Христос в пустыне",
+    "artist": "Иван Крамской",
+    "year": "1872",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/christ-in-the-wilderness-ivan-kramskoy/uwEOJTS-uQb5ww"
+  },
+  {
+    "title": "Молебствие и парад (Исаакиевский собор)",
+    "artist": "Григорий Чернецов",
+    "year": "1831",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh-3604/index.php?lang=ru"
+  },
+  {
+    "title": "Вид Одессы в лунную ночь",
+    "artist": "Айвазовский Иван",
+    "year": "1846",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_2201/2199_mainfoto_03.jpg"
+  },
+  {
+    "title": "Боярыня Морозова",
+    "artist": "Василий Суриков",
+    "year": "1887",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/boyarina-morozova-vasily-surikov/ogHGQgd1Ws9Htg"
+  },
+  {
+    "title": "Апофеоз войны",
+    "artist": "Василий Верещагин",
+    "year": "1871",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/the-apotheosis-of-war-vasily-vereshchagin/RAHHXrpeZGsYyw"
+  },
+  {
+    "title": "Лунная ночь в Крыму",
+    "artist": "Иван Айвазовский",
+    "year": "1859",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_5878/index.php?lang=ru"
+  },
+  {
+    "title": "Бабы",
+    "artist": "Филипп Малявин",
+    "year": "1905",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_1914/index.php?lang=ru"
+  },
+  {
+    "title": "Явление Христа народу (Явление Мессии)",
+    "artist": "Александр Иванов",
+    "year": "1837–1857",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/the-apparition-of-christ-to-the-people-the-apparition-of-the-messiah-aleksander-ivanov/lgGqUffODe21kA"
+  },
+  {
+    "title": "Дубы",
+    "artist": "Иван Шишкин",
+    "year": "1865",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-4127/index.php?lang=ru"
+  },
+  {
+    "title": "Последний день Помпеи",
+    "artist": "Карл Брюллов",
+    "year": "1833",
+    "museum": "Русский музей",
+    "image_url": "https://commons.wikimedia.org/wiki/File%3AKarl_Briullov%2C_The_Last_Day_of_Pompeii_%281827%E2%80%931833%29.jpg"
+  },
+  {
+    "title": "Девушка с персиками (Портрет В.С. Мамонтовой)",
+    "artist": "Валентин Серов",
+    "year": "1887",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/girl-with-peaches-portrait-of-v-s-mamontova/vgFS_-o4tXr4Rw"
+  },
+  {
+    "title": "Грачи прилетели",
+    "artist": "Алексей Саврасов",
+    "year": "1871",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/rooks-have-returned-aleksey-savrasov/qgEUs-kiMGydOg"
+  },
+  {
+    "title": "Портрет поэта А.С. Пушкина",
+    "artist": "Кипренский Орест",
+    "year": "1827",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/23/29a62f760b1397406bf213945f2e403a/thumb/62583a0cf7eaa184d54ec8b30d525fbb_x1.jpg"
+  },
+  {
+    "title": "Портрет Петра III",
+    "artist": "Антропов Алексей",
+    "year": "1762",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/17_19/antropov_ap_portret_petra_iii_okolo_1762_zh_5822/3731_mainfoto_03.jpg"
+  },
+  {
+    "title": "Композиция VII",
+    "artist": "Василий Кандинский",
+    "year": "1913",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/composition-vii-vasily-kandinsky/CQHOKgpWcL_UPA"
+  },
+  {
+    "title": "Портрет Т.А. Мамонтовой",
+    "artist": "Васнецов Виктор",
+    "year": "1884",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/23/50ad7479c41d0fd8dd637a5a2f7b3672/thumb/d4251909b19459f8373c293b5f21eb87_x1.j"
+  },
+  {
+    "title": "Портрет Генриетты Гиршман",
+    "artist": "Валентин Серов",
+    "year": "1907",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/portrait-of-henriette-girshman-valentin-serov/awE5Mk2d3xtvhA"
+  },
+  {
+    "title": "Русская эскадра на Севастопольском рейде",
+    "artist": "Айвазовский Иван",
+    "year": "1846",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_8237/1993_mainfoto_03.jpg"
+  },
+  {
+    "title": "В роще",
+    "artist": "Иван Шишкин",
+    "year": "1865",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh-4126/index.php?lang=ru"
+  },
+  {
+    "title": "Демон (сидящий)",
+    "artist": "Михаил Врубель",
+    "year": "1890",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/demon-sitting-mikhail-vrubel/EQFjnAisIfWvAQ"
+  },
+  {
+    "title": "Лизынька и Дашинька",
+    "artist": "Боровиковский Владимир",
+    "year": "1794",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/21/ddcee4fa5434c5a02ecb7892cd40f195/thumb/734dc5be2cd1584226fe704b4c382a22_x1.jpg"
+  },
+  {
+    "title": "Портрет Микеланджело Ланчи",
+    "artist": "Брюллов Карл",
+    "year": "1851",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/22/5019226f93cb758b3969809d21efe269/thumb/88cd2a4e1ecdd9010c2e6b52cedcf477_x1.jpg"
+  },
+  {
+    "title": "Богатыри",
+    "artist": "Виктор Васнецов",
+    "year": "1898",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/bogatyri-viktor-vasnetsov/GgFy94lN-r6DXw"
+  },
+  {
+    "title": "Портрет В.О. Гиршман",
+    "artist": "Серов Валентин",
+    "year": "1911",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/26/e4ab8a01cf2919ad0ec21f66acdfd4bb/thumb/179519adc1cc918b7463b748e291278c_x1.jpg"
+  },
+  {
+    "title": "Кружевница",
+    "artist": "Тропинин Василий",
+    "year": "1823",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/23/c48ebfb2dd36be0637dffa357103c2e5/thumb/14db62200d8bf46551aa214accafe1df_x2.png"
+  },
+  {
+    "title": "Портрет Петра III",
+    "artist": "Антропов Алексей",
+    "year": "1762",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/antropov_portrait_peter3/1812_mainfoto_03.jpg"
+  },
+  {
+    "title": "Л. Н. Толстой босой",
+    "artist": "Илья Репин",
+    "year": "1901",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_4010/index.php?lang=ru"
+  },
+  {
+    "title": "Портрет княгини Е. А. Лобановой-Ростовской",
+    "artist": "Аргунов Иван",
+    "year": "1754",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4927/1969_mainfoto_03.jpg"
+  },
+  {
+    "title": "Фиорд Христиания",
+    "artist": "Баранов-Россинэ Владимир",
+    "year": "1915",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/baranov_rossine_vd_fiord_hristianiya_1915_zhb1415/2932_mainfoto_03.jpg"
+  },
+  {
+    "title": "Дама в голубом",
+    "artist": "Сомов Константин",
+    "year": "1897-1900",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/26/252909c0b6a9f015b3e2c45ebd8497ee/thumb/0b05e2f5a10750f6fc431fe91cd28aa7_x1.jpg"
+  },
+  {
+    "title": "Девятый вал",
+    "artist": "Иван Айвазовский",
+    "year": "1850",
+    "museum": "Русский музей",
+    "image_url": "https://commons.wikimedia.org/wiki/File%3AHovhannes_Aivazovsky_-_The_Ninth_Wave_-_Google_Art_Project.jpg"
+  },
+  {
+    "title": "Вид на Михайловский замок в Петербурге со стороны Фонтанки",
+    "artist": "Алексеев Фёдор",
+    "year": "Ок.1800",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/17_19/alekseev_fya_vid_na_mih_zamok_s_fontanki_ok1800_zh_3293/3715_mainfoto_03.jpg"
+  },
+  {
+    "title": "Девятый вал",
+    "artist": "Айвазовский Иван",
+    "year": "1850",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_2202/2141_mainfoto_03.jpg"
+  },
+  {
+    "title": "Портрет писателя Ивана Тургенева",
+    "artist": "Василий Перов",
+    "year": "1872",
+    "museum": "Русский музей",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Turgenev_1872_by_Perov.jpg"
+  },
+  {
+    "title": "Витязь на распутье",
+    "artist": "Виктор Васнецов",
+    "year": "1882",
+    "museum": "Русский музей",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/19-v_2h_Vasnetsov.jpg/2880px-19-v_2h_Vasnetsov.jpg"
+  },
+  {
+    "title": "Портрет М. А. Румянцевой",
+    "artist": "Антропов Алексей",
+    "year": "1764",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_4920/1943_mainfoto_03.jpg"
+  },
+  {
+    "title": "Портрет С. П. Дягилева с няней",
+    "artist": "Бакст Лев",
+    "year": "1906",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_2117/2275_mainfoto_03.jpg"
+  },
+  {
+    "title": "Крестный ход в Курской губернии",
+    "artist": "Илья Репин",
+    "year": "1880–1883",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/religious-procession-in-kursk-gubernia-ilya-repin/hwHNI1pexsKRvw"
+  },
+  {
+    "title": "Всадница",
+    "artist": "Брюллов Карл",
+    "year": "1832",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://cdn.tretyakov.ru/mytretyakov/22/6827c3dfc19ebbb4cdf05f2dbc7ca4a1/thumb/fe6cf670c2598ffe3cefad2e23017e3d_x1.jpg"
+  },
+  {
+    "title": "Троица",
+    "artist": "Андрей Рублёв",
+    "year": "1425–1427",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/holy-trinity-troitsa-andrey-rublev/xAHfUdaiKn8EBA"
+  },
+  {
+    "title": "Вид Казанского собора в Петербурге",
+    "artist": "Алексеев Фёдор",
+    "year": "Не ранее 1810",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_5049/2116_mainfoto_03.jpg"
+  },
+  {
+    "title": "Портрет Фёдора Достоевского",
+    "artist": "Василий Перов",
+    "year": "1872",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/portrait-of-fedor-dostoyevsky-vasily-perov/kgHBFHS7SpcayQ"
+  },
+  {
+    "title": "Рожь",
+    "artist": "Иван Шишкин",
+    "year": "1878",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/rye-ivan-shishkin/iAEOUlRJYj2FAg"
+  },
+  {
+    "title": "Лунная ночь на Днепре",
+    "artist": "Архип Куинджи",
+    "year": "1880",
+    "museum": "Русский музей",
+    "image_url": "https://commons.wikimedia.org/wiki/File%3AKuindzhi_Moonlit_night_on_the_Dnieper_1880_grm_x2.jpg"
+  },
+  {
+    "title": "Композиция с Джокондой («Частичное затмение»)",
+    "artist": "Казимир Малевич",
+    "year": "1914",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/malevich_k.s._kompoziciya_s_dzhokondoy_chastichnoe_zatmenie._1914._zhs-440/index.php?lang=ru"
+  },
+  {
+    "title": "Картинная галерея Строгановского дворца",
+    "artist": "Николай Никитин",
+    "year": "1832",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/18_19/zh_5126/index.php?lang=ru"
+  },
+  {
+    "title": "Утро стрелецкой казни",
+    "artist": "Василий Суриков",
+    "year": "1881",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/the-morning-of-the-execution-of-the-streltsy-vasily-surikov/xAGX5DyRl-AyWw"
+  },
+  {
+    "title": "Портрет М.П. Мусоргского",
+    "artist": "Илья Репин",
+    "year": "1881",
+    "museum": "Третьяковская галерея",
+    "image_url": "https://artsandculture.google.com/asset/modest-mussorgsky-ilya-repin/wAEto1rus6nXFQ"
+  },
+  {
+    "title": "Ужин",
+    "artist": "Бакст Лев",
+    "year": "1902",
+    "museum": "Русский музей",
+    "image_url": "https://rusmuseumvrm.ru/data/collections/painting/19_20/zh_2118/2274_mainfoto_03.jpg"
+  }
 ]
