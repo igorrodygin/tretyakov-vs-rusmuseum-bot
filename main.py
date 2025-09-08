@@ -6,7 +6,7 @@ import sqlite3
 
 from datetime import datetime, timezone
 
-DAILY_LIMIT = 20  # дневной лимит показов карточек на пользователя
+DAILY_LIMIT = 15  # дневной лимит показов карточек на пользователя
 
 def _today_key() -> str:
     return datetime.now(timezone.utc).strftime('%Y%m%d')
