@@ -3,6 +3,7 @@ import json
 import random
 import time
 import sqlite3
+import asyncio
 from datetime import datetime, timezone, timedelta
 
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, InputMediaPhoto
@@ -238,13 +239,14 @@ def _enqueue_tomorrow_stats(user_id: int) -> None:
     finally:
         con.close()
 
-# -------------------- Deck (no-repeat) --------------------
+# -------------------- Deck (no-repeat, fixed order for all users) --------------------
 
 _rng = random.SystemRandom()
 
 def _new_deck(n: int):
     deck = list(range(n))
-    _rng.shuffle(deck)
+    # IMPORTANT: keep the SAME global order for every user — do NOT shuffle
+    # _rng.shuffle(deck)
     return deck
 
 def _load_deck(con: sqlite3.Connection, user_id: int):
@@ -307,12 +309,12 @@ def save_session(user_id: int, q: dict):
 # -------------------- UI helpers --------------------
 
 def answer_keyboard():
+    # Only museum choices, no "next" button – we auto-advance after answer
     return InlineKeyboardMarkup([
         [
             InlineKeyboardButton("1) Русский музей", callback_data="ans:Русский музей"),
             InlineKeyboardButton("2) Третьяковская галерея", callback_data="ans:Третьяковская галерея")
-        ],
-        [InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]
+        ]
     ])
 
 # -------------------- Handlers --------------------
@@ -380,9 +382,6 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     data = (query.data or "")
 
-    if data == "next":
-        return await play(update, context)
-
     if not data.startswith("ans:"):
         return
 
@@ -396,7 +395,8 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ).fetchone()
         if not row:
             await query.edit_message_caption(caption="Сессия не найдена. Нажми /play.")
-            return
+            # авто-переход к следующему на всякий случай
+            return await play(update, context)
 
         q_title, q_artist, q_year, q_museum, q_image_url, q_note = row
         is_correct = (chosen == q_museum)
@@ -405,15 +405,19 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         result = "✅ Верно!" if is_correct else f"❌ Неверно. Правильно: {q_museum}"
         extra = f"\n\n<b>{q_title}</b>\n<i>{q_artist}</i>, {q_year}\n\n{q_note}" if q_note else ""
         try:
+            # Меняем подпись у текущего сообщения...
             await query.edit_message_caption(
                 caption=result + extra,
                 parse_mode=ParseMode.HTML,
-                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]])
             )
         except BadRequest:
+            # Если не получилось — отправим отдельным сообщением
             await query.message.reply_text(result + extra, parse_mode=ParseMode.HTML)
     finally:
         con.close()
+
+    # ...и сразу показываем следующее изображение — без кнопки "Следующая"
+    return await play(update, context)
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
