@@ -3,20 +3,41 @@ import json
 import random
 import time
 import sqlite3
+from datetime import datetime, timezone, timedelta
 
-from datetime import datetime, timezone
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, InputMediaPhoto
+from telegram.constants import ParseMode
+from telegram.error import BadRequest
+from telegram.ext import Application, ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+DATA_PATH = os.environ.get("DATA_PATH", "data/paintings.json")
+DB_PATH = os.environ.get("DB_PATH", "bot.sqlite3")
+
+VALID_MUSEUMS = {"Русский музей", "Третьяковская галерея"}
+WEEK_WINDOW_DAYS = 7
 DAILY_LIMIT = 16  # дневной лимит показов карточек на пользователя
+
+PAINTINGS = None
+
+# -------------------- Utilities: dates & quota --------------------
 
 def _today_key() -> str:
     return datetime.now(timezone.utc).strftime('%Y%m%d')
 
+def _today_date_str_utc() -> str:
+    return datetime.now(timezone.utc).date().isoformat()
+
+def _tomorrow_9utc_epoch() -> int:
+    # Отправляем на следующее утро в 09:00 UTC (можно поменять или сделать per-user TZ)
+    now = datetime.now(timezone.utc)
+    tomorrow = (now + timedelta(days=1)).date()
+    dt = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 9, 0, 0, tzinfo=timezone.utc)
+    return int(dt.timestamp())
+
 def get_used_today(con: sqlite3.Connection, user_id: int) -> int:
     day = _today_key()
-    row = con.execute(
-        'SELECT used FROM daily_quota WHERE user_id=? AND day=?',
-        (user_id, day)
-    ).fetchone()
+    row = con.execute("SELECT used FROM daily_quota WHERE user_id=? AND day=?", (user_id, day)).fetchone()
     return row[0] if row else 0
 
 def inc_used_today(con: sqlite3.Connection, user_id: int, delta: int = 1) -> None:
@@ -31,16 +52,7 @@ def inc_used_today(con: sqlite3.Connection, user_id: int, delta: int = 1) -> Non
     )
     con.commit()
 
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, InputMediaPhoto
-from telegram.constants import ParseMode
-from telegram.error import BadRequest
-from telegram.ext import Application, ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
-
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-DATA_PATH = os.environ.get("DATA_PATH", "data/paintings.json")
-DB_PATH = os.environ.get("DB_PATH", "bot.sqlite3")
-VALID_MUSEUMS = {"Русский музей", "Третьяковская галерея"}
-WEEK_WINDOW_DAYS = 7
+# -------------------- DB init & data loading --------------------
 
 def db_init():
     con = sqlite3.connect(DB_PATH)
@@ -59,7 +71,6 @@ def db_init():
             user_id INTEGER PRIMARY KEY,
             correct INTEGER DEFAULT 0,
             total INTEGER DEFAULT 0,
-            streak INTEGER DEFAULT 0,
             updated_at INTEGER
         )
     """)
@@ -80,33 +91,43 @@ def db_init():
             q_museum TEXT,
             q_image_url TEXT,
             q_note TEXT,
-            ts INTEGER
+            asked_at INTEGER
         )
     """)
-
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS decks (
-          user_id    INTEGER PRIMARY KEY,
-          deck_json  TEXT    NOT NULL,
-          shown_json TEXT    NOT NULL
+        CREATE TABLE IF NOT EXISTS decks(
+            user_id INTEGER PRIMARY KEY,
+            deck_json TEXT NOT NULL,
+            shown_json TEXT NOT NULL
         )
     """)
-
     cur.execute("""
         CREATE TABLE IF NOT EXISTS daily_quota(
             user_id INTEGER NOT NULL,
             day TEXT NOT NULL,
             used INTEGER DEFAULT 0,
-            PRIMARY KEY (user_id, day)
+            PRIMARY KEY(user_id, day)
         )
     """)
-
+    # Очередь отложенных сообщений со статистикой
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS stats_queue(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            stats_date TEXT NOT NULL,   -- дата (UTC) за которую сформирована статистика
+            payload TEXT NOT NULL,      -- зафиксированный текст статистики на конец дня
+            send_at INTEGER NOT NULL,   -- unix epoch (UTC) когда отправить
+            sent_at INTEGER,            -- unix epoch когда фактически отправили
+            UNIQUE(user_id, stats_date) -- не дублировать одно и то же за день
+        )
+    """)
     con.commit()
     con.close()
 
 def load_paintings():
     with open(DATA_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
+
     cleaned = []
     for item in data:
         museum = item.get("museum", "").strip()
@@ -119,116 +140,66 @@ def load_paintings():
                 "image_url": item["image_url"].strip(),
                 "note": item.get("note", "").strip()
             })
+
     if not cleaned:
         raise RuntimeError("В paintings.json нет валидных записей для игры.")
+
     return cleaned
 
-PAINTINGS = None
-
-# --- Deck-based no-repeat randomizer ---
-import json as _json
-_rng = random.SystemRandom()
-
-def _new_deck(n: int):
-    deck = list(range(n))
-    ### _rng.shuffle(deck) ## Do not shuffle
-    return deck
-
-def _load_deck(con, user_id: int):
-    cur = con.cursor()
-    row = cur.execute("SELECT deck_json, shown_json FROM decks WHERE user_id=?", (user_id,)).fetchone()
-    if row is None:
-        deck, shown = _new_deck(len(PAINTINGS)), []
-        cur.execute("INSERT INTO decks(user_id, deck_json, shown_json) VALUES(?,?,?)",
-                    (user_id, _json.dumps(deck), _json.dumps(shown)))
-        con.commit()
-        return deck, shown
-    return _json.loads(row[0]), _json.loads(row[1])
-
-def _save_deck(con, user_id: int, deck, shown):
-    con.execute("UPDATE decks SET deck_json=?, shown_json=? WHERE user_id=?",
-                (_json.dumps(deck), _json.dumps(shown), user_id))
-    con.commit()
-
-def draw_next_painting(con, user_id: int) -> dict:
-    deck, shown = _load_deck(con, user_id)
-    if not deck:
-        deck, shown = _new_deck(len(PAINTINGS)), []
-    idx = deck.pop()
-    shown.append(idx)
-    _save_deck(con, user_id, deck, shown)
-    return PAINTINGS[idx]
-
+# -------------------- User & stats helpers --------------------
 
 def ensure_user(update: Update):
-    u = update.effective_user
+    user = update.effective_user
     con = sqlite3.connect(DB_PATH)
-    cur = con.cursor()
-    cur.execute("INSERT OR IGNORE INTO users(user_id, username, first_name, last_name, created_at) VALUES(?,?,?,?,?)",
-                (u.id, u.username, u.first_name, u.last_name, int(time.time())))
-    cur.execute("INSERT OR IGNORE INTO stats(user_id, correct, total, streak, updated_at) VALUES(?,?,?,?,?)",
-                (u.id, 0, 0, 0, int(time.time())))
-    con.commit()
-    con.close()
+    try:
+        con.execute(
+            """
+            INSERT INTO users(user_id, username, first_name, last_name, created_at)
+            VALUES(?,?,?,?,?)
+            ON CONFLICT(user_id) DO UPDATE SET
+                username=excluded.username,
+                first_name=excluded.first_name,
+                last_name=excluded.last_name
+            """,
+            (user.id, user.username, user.first_name, user.last_name, int(time.time())),
+        )
+        con.commit()
+    finally:
+        con.close()
 
-def save_session(user_id: int, q: dict):
-    con = sqlite3.connect(DB_PATH)
+def update_stats(con: sqlite3.Connection, user_id: int, correct: bool):
     cur = con.cursor()
-    cur.execute("""
-        INSERT OR REPLACE INTO sessions(user_id, q_title, q_artist, q_year, q_museum, q_image_url, q_note, ts)
-        VALUES(?,?,?,?,?,?,?,?)
-    """, (user_id, q["title"], q["artist"], q["year"], q["museum"], q["image_url"], q.get("note",""), int(time.time())))
-    con.commit()
-    con.close()
-
-def get_session(user_id: int):
-    con = sqlite3.connect(DB_PATH)
-    cur = con.cursor()
-    cur.execute("""
-        SELECT q_title, q_artist, q_year, q_museum, q_image_url, q_note, ts
-        FROM sessions WHERE user_id=?
-    """, (user_id,))
-    row = cur.fetchone()
-    con.close()
+    row = cur.execute("SELECT correct, total FROM stats WHERE user_id=?", (user_id,)).fetchone()
     if not row:
-        return None
-    keys = ["title", "artist", "year", "museum", "image_url", "note", "ts"]
-    return dict(zip(keys, row))
-
-def update_stats(user_id: int, correct: bool):
-    now = int(time.time())
-    con = sqlite3.connect(DB_PATH)
-    cur = con.cursor()
-    cur.execute("SELECT correct, total, streak FROM stats WHERE user_id=?", (user_id,))
-    row = cur.fetchone()
-    c, t, s = row if row else (0, 0, 0)
-    t += 1
-    if correct:
-        c += 1
-        s += 1
+        correct_cnt = 1 if correct else 0
+        total_cnt = 1
+        cur.execute(
+            "INSERT INTO stats(user_id, correct, total, updated_at) VALUES(?,?,?,?)",
+            (user_id, correct_cnt, total_cnt, int(time.time()))
+        )
     else:
-        s = 0
-    cur.execute("INSERT OR REPLACE INTO stats(user_id, correct, total, streak, updated_at) VALUES(?,?,?,?,?)",
-                (user_id, c, t, s, now))
-
-    cur.execute("SELECT correct, total, ts FROM leaderboard WHERE user_id=?", (user_id,))
-    row2 = cur.fetchone()
-    if not row2:
-        lc, lt = (1 if correct else 0), 1
-    else:
-        lc, lt, _ = row2
-        lc += (1 if correct else 0)
-        lt += 1
-    cur.execute("INSERT OR REPLACE INTO leaderboard(user_id, correct, total, ts) VALUES(?,?,?,?)",
-                (user_id, lc, lt, now))
+        correct_cnt, total_cnt = row
+        correct_cnt += 1 if correct else 0
+        total_cnt += 1
+        cur.execute(
+            "UPDATE stats SET correct=?, total=?, updated_at=? WHERE user_id=?",
+            (correct_cnt, total_cnt, int(time.time()), user_id)
+        )
+    cur.execute("""
+        INSERT INTO leaderboard(user_id, correct, total, ts)
+        VALUES(?,?,?,?)
+        ON CONFLICT(user_id) DO UPDATE SET
+            correct=leaderboard.correct + excluded.correct,
+            total=leaderboard.total + excluded.total,
+            ts=excluded.ts
+    """, (user_id, 1 if correct else 0, 1, int(time.time())))
     con.commit()
-    con.close()
 
-def leaderboard_top(limit=10):
-    now = int(time.time())
-    week_ago = now - 7 * 86400
+def leaderboard_top(limit: int = 10):
     con = sqlite3.connect(DB_PATH)
     cur = con.cursor()
+    now = int(time.time())
+    week_ago = now - WEEK_WINDOW_DAYS * 86400
     cur.execute("""
         SELECT l.user_id, l.correct, l.total, u.username, u.first_name, u.last_name
         FROM leaderboard l
@@ -241,14 +212,110 @@ def leaderboard_top(limit=10):
     con.close()
     return rows
 
+def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
+    row = con.execute("SELECT correct, total FROM stats WHERE user_id=?", (user_id,)).fetchone()
+    if not row:
+        return "Статистика пока пустая. Нажми /play, чтобы начать."
+    correct, total = row
+    acc = (correct / total * 100) if total else 0.0
+    return (
+        "Твоя статистика за вчерашний день:\n"
+        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)"
+    )
+
+def _enqueue_tomorrow_stats(user_id: int) -> None:
+    """Фиксируем сегодняшнюю статистику и планируем отправку на завтра утром."""
+    con = sqlite3.connect(DB_PATH)
+    try:
+        payload = _format_stats_payload(con, user_id)
+        stats_date = _today_date_str_utc()     # дата, за которую статистика
+        send_at = _tomorrow_9utc_epoch()       # когда отправить
+        con.execute(
+            "INSERT OR IGNORE INTO stats_queue(user_id, stats_date, payload, send_at) VALUES(?,?,?,?)",
+            (user_id, stats_date, payload, send_at)
+        )
+        con.commit()
+    finally:
+        con.close()
+
+# -------------------- Deck (no-repeat) --------------------
+
+_rng = random.SystemRandom()
+
+def _new_deck(n: int):
+    deck = list(range(n))
+    _rng.shuffle(deck)
+    return deck
+
+def _load_deck(con: sqlite3.Connection, user_id: int):
+    cur = con.cursor()
+    row = cur.execute("SELECT deck_json, shown_json FROM decks WHERE user_id=?", (user_id,)).fetchone()
+    if row is None:
+        deck, shown = _new_deck(len(PAINTINGS)), []
+        cur.execute("INSERT INTO decks(user_id, deck_json, shown_json) VALUES(?,?,?)",
+                    (user_id, json.dumps(deck), json.dumps(shown)))
+        con.commit()
+        return deck, shown
+    return json.loads(row[0]), json.loads(row[1])
+
+def _save_deck(con: sqlite3.Connection, user_id: int, deck, shown):
+    con.execute("UPDATE decks SET deck_json=?, shown_json=? WHERE user_id=?",
+                (json.dumps(deck), json.dumps(shown), user_id))
+    con.commit()
+
+def draw_next_painting(con: sqlite3.Connection, user_id: int) -> dict:
+    deck, shown = _load_deck(con, user_id)
+    if not deck:
+        deck = _new_deck(len(PAINTINGS))
+        shown = []
+    idx = deck.pop(0)
+    shown.append(idx)
+    _save_deck(con, user_id, deck, shown)
+    return PAINTINGS[idx]
+
+# -------------------- Sessions --------------------
+
+def save_session(user_id: int, q: dict):
+    """Сохраняем текущий вопрос для пользователя (для последующей проверки ответа)."""
+    con = sqlite3.connect(DB_PATH)
+    try:
+        con.execute("""
+            INSERT INTO sessions(user_id, q_title, q_artist, q_year, q_museum, q_image_url, q_note, asked_at)
+            VALUES(?,?,?,?,?,?,?,?)
+            ON CONFLICT(user_id) DO UPDATE SET
+                q_title=excluded.q_title,
+                q_artist=excluded.q_artist,
+                q_year=excluded.q_year,
+                q_museum=excluded.q_museum,
+                q_image_url=excluded.q_image_url,
+                q_note=excluded.q_note,
+                asked_at=excluded.asked_at
+        """, (
+            user_id,
+            q.get("title"),
+            q.get("artist"),
+            q.get("year"),
+            q.get("museum"),
+            q.get("image_url"),
+            q.get("note"),
+            int(time.time())
+        ))
+        con.commit()
+    finally:
+        con.close()
+
+# -------------------- UI helpers --------------------
+
 def answer_keyboard():
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("1) Русский музей", callback_data="ans:Русский музей"),
-         InlineKeyboardButton("2) Третьяковская галерея", callback_data="ans:Третьяковская галерея")]
+        [
+            InlineKeyboardButton("1) Русский музей", callback_data="ans:Русский музей"),
+            InlineKeyboardButton("2) Третьяковская галерея", callback_data="ans:Третьяковская галерея")
+        ],
+        [InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]
     ])
 
-def next_keyboard():
-    return InlineKeyboardMarkup([[InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]])
+# -------------------- Handlers --------------------
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
@@ -266,96 +333,129 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         used = get_used_today(con, user_id)
         if used >= DAILY_LIMIT:
-            await stats(update, context)
+            _enqueue_tomorrow_stats(user_id)
             await update.effective_message.reply_text("На сегодня всё. Приходите завтра!")
             return
+
         q = draw_next_painting(con, user_id)
         inc_used_today(con, user_id, 1)
+        save_session(user_id, q)
+
+        caption = (
+            f"🖼 <b>{q['title']}</b>\n{q['artist']}, {q['year']}\n\n"
+            "<i>Из какого музея эта работа?</i>"
+        )
+
+        try:
+            await update.effective_message.reply_photo(
+                photo=q["image_url"],
+                caption=caption,
+                parse_mode=ParseMode.HTML,
+                reply_markup=answer_keyboard()
+            )
+            # Успешно: удаляем предыдущее сообщение об ошибке, если было
+            err_id = context.user_data.pop("last_error_msg_id", None)
+            if err_id:
+                try:
+                    await context.bot.delete_message(
+                        chat_id=update.effective_chat.id,
+                        message_id=err_id
+                    )
+                except Exception:
+                    pass
+        except BadRequest:
+            msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
+            context.user_data["last_error_msg_id"] = msg.message_id
+            return await play(update, context)
+        except Exception:
+            msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
+            context.user_data["last_error_msg_id"] = msg.message_id
+            return await play(update, context)
     finally:
         con.close()
-    save_session(user_id, q)
-    caption = f"🖼 <b>{q['title']}</b>\n{q['artist']}, {q['year']}\n\n<i>Из какого музея эта работа?</i>"
-    try:
-        await update.effective_message.reply_photo(
-            photo=q["image_url"],
-            caption=caption,
-            parse_mode=ParseMode.HTML,
-            reply_markup=answer_keyboard()
-        )
-        # Успешно: удаляем предыдущее сообщение об ошибке, если было
-        err_id = context.user_data.pop("last_error_msg_id", None)
-        if err_id:
-            try:
-                await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=err_id)
-            except Exception:
-                pass
-    except BadRequest:
-        msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
-        context.user_data["last_error_msg_id"] = msg.message_id
-        return await play(update, context)
-    except Exception:
-        msg = await update.effective_message.reply_text("Не удалось показать картину, попробуйте ещё раз")
-        context.user_data["last_error_msg_id"] = msg.message_id
-        return await play(update, context)
 
-async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    user_id = query.from_user.id
-    data = query.data
+    user_id = update.effective_user.id
+    data = (query.data or "")
 
-    # If "next" pressed (legacy), just load the next artwork
     if data == "next":
         return await play(update, context)
 
-    # Only handle answers like "ans:<museum>"
-    if not isinstance(data, str) or not data.startswith("ans:"):
+    if not data.startswith("ans:"):
         return
 
     chosen = data.split(":", 1)[1]
 
-    session = get_session(user_id)
-    if not session:
-        # No session -> prompt to start and immediately continue
-        try:
-            await query.message.edit_caption(caption="Сессия не найдена. Нажмите /play", parse_mode=ParseMode.HTML, reply_markup=None)
-        except Exception:
-            pass
-        return await play(update, context)
-
-    is_correct = (chosen == session["museum"])
-    update_stats(user_id, is_correct)
-
-    verdict = "✅ Правильно!" if is_correct else f"❌ Неверно. Правильный ответ: <b>{session['museum']}</b>."
-    note = (" " + session["note"]) if session.get("note") else ""
-    caption = f"🖼 <b>{session['title']}</b>\n{session['artist']}, {session['year']}\n\n{verdict}{note}"
-
-    # Show verdict on the same message (remove the old answer buttons)
+    con = sqlite3.connect(DB_PATH)
     try:
-        await query.message.edit_caption(caption=caption, parse_mode=ParseMode.HTML, reply_markup=None)
-    except Exception:
-        pass
+        row = con.execute(
+            "SELECT q_title, q_artist, q_year, q_museum, q_image_url, q_note FROM sessions WHERE user_id=?",
+            (user_id,)
+        ).fetchone()
+        if not row:
+            await query.edit_message_caption(caption="Сессия не найдена. Нажми /play.")
+            return
 
-    # Immediately load the next artwork (no 'Еще картину' button)
-    return await play(update, context)
+        q_title, q_artist, q_year, q_museum, q_image_url, q_note = row
+        is_correct = (chosen == q_museum)
+        update_stats(con, user_id, is_correct)
 
+        result = "✅ Верно!" if is_correct else f"❌ Неверно. Правильно: {q_museum}"
+        extra = f"\n\n<b>{q_title}</b>\n<i>{q_artist}</i>, {q_year}\n\n{q_note}" if q_note else ""
+        try:
+            await query.edit_message_caption(
+                caption=result + extra,
+                parse_mode=ParseMode.HTML,
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Ещё картину ▶️", callback_data="next")]])
+            )
+        except BadRequest:
+            await query.message.reply_text(result + extra, parse_mode=ParseMode.HTML)
+    finally:
+        con.close()
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
     con = sqlite3.connect(DB_PATH)
     cur = con.cursor()
-    cur.execute("SELECT correct, total, streak FROM stats WHERE user_id=?", (update.effective_user.id,))
+    cur.execute("SELECT correct, total FROM stats WHERE user_id=?", (update.effective_user.id,))
     row = cur.fetchone()
     con.close()
     if not row:
         await update.effective_message.reply_text("Статистика пока пустая. Нажми /play, чтобы начать.")
         return
-    correct, total, streak = row
+    correct, total = row
     acc = (correct / total * 100) if total else 0.0
     await update.effective_message.reply_text(
-        f"Твоя статистика:\nПравильных ответов: {correct}/{total} ({acc:.1f}%)\nСерия подряд: {streak}"
+        f"Твоя статистика:\nПравильных ответов: {correct}/{total} ({acc:.1f}%)"
     )
-    
+
+async def _send_due_stats_job(context: ContextTypes.DEFAULT_TYPE):
+    """Фоновая задача: отправить все отложенные статистики, которые уже пора отправить."""
+    now_ts = int(time.time())  # UTC
+    con = sqlite3.connect(DB_PATH)
+    try:
+        rows = con.execute(
+            """
+            SELECT id, user_id, payload FROM stats_queue
+            WHERE sent_at IS NULL AND send_at <= ?
+            ORDER BY send_at ASC
+            LIMIT 50
+            """,
+            (now_ts,)
+        ).fetchall()
+        for q_id, user_id, payload in rows:
+            try:
+                await context.bot.send_message(chat_id=user_id, text=payload)
+                con.execute("UPDATE stats_queue SET sent_at=? WHERE id=?", (now_ts, q_id))
+                con.commit()
+            except Exception:
+                # Оставляем неотправленным — повторим на следующем тике
+                pass
+    finally:
+        con.close()
+
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     rows = leaderboard_top()
     if not rows:
@@ -364,21 +464,15 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     lines = ["🏆 Топ за 7 дней:"]
     for idx, (user_id, correct, total, username, first_name, last_name) in enumerate(rows, 1):
         if username:
-            name = f"@{username}"
+            who = f"@{username}"
         else:
-            full = " ".join([n for n in [first_name, last_name] if n])
-            name = full if full else f"ID {user_id}"
-        rate = (correct / total * 100) if total else 0.0
-        lines.append(f"{idx}. {name}: {correct}/{total} ({rate:.1f}%)")
+            parts = [x for x in [first_name, last_name] if x]
+            who = " ".join(parts) if parts else f"id:{user_id}"
+        acc = (correct / total * 100) if total else 0.0
+        lines.append(f"{idx}. {who}: {correct}/{total} ({acc:.1f}%)")
     await update.effective_message.reply_text("\n".join(lines))
 
-# async def start(update: Update, context):
-#     keyboard = [
-#         [InlineKeyboardButton("Запустить игру 🎨", web_app={"url": "https://igorrodygin.github.io/what-museum-miniapp/"})]
-#     ]
-#     reply_markup = InlineKeyboardMarkup(keyboard)
-#     await update.message.reply_text("Добро пожаловать! Жми кнопку ниже, чтобы сыграть 👇", reply_markup=reply_markup)
-
+# -------------------- App bootstrap --------------------
 
 def main():
     global PAINTINGS
@@ -386,12 +480,18 @@ def main():
     PAINTINGS = load_paintings()
     if not BOT_TOKEN:
         raise RuntimeError("Не задан BOT_TOKEN в переменных окружения.")
+
     app: Application = ApplicationBuilder().token(BOT_TOKEN).build()
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("play", play))
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
-    app.add_handler(CallbackQueryHandler(on_answer))
+    app.add_handler(CallbackQueryHandler(on_callback))
+
+    # Каждую минуту проверяем, нет ли отложенных статистик для отправки
+    app.job_queue.run_repeating(_send_due_stats_job, interval=60, first=10)
+
     app.run_polling(close_loop=False)
 
 if __name__ == "__main__":
