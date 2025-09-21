@@ -91,7 +91,7 @@ def db_init():
             q_museum TEXT,
             q_image_url TEXT,
             q_note TEXT,
-            asked_at INTEGER
+            ts INTEGER
         )
     """)
     cur.execute("""
@@ -280,7 +280,7 @@ def save_session(user_id: int, q: dict):
     con = sqlite3.connect(DB_PATH)
     try:
         con.execute("""
-            INSERT INTO sessions(user_id, q_title, q_artist, q_year, q_museum, q_image_url, q_note, asked_at)
+            INSERT INTO sessions(user_id, q_title, q_artist, q_year, q_museum, q_image_url, q_note, ts)
             VALUES(?,?,?,?,?,?,?,?)
             ON CONFLICT(user_id) DO UPDATE SET
                 q_title=excluded.q_title,
@@ -289,7 +289,7 @@ def save_session(user_id: int, q: dict):
                 q_museum=excluded.q_museum,
                 q_image_url=excluded.q_image_url,
                 q_note=excluded.q_note,
-                asked_at=excluded.asked_at
+                ts=excluded.ts
         """, (
             user_id,
             q.get("title"),
