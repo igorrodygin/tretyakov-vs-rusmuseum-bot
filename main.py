@@ -403,7 +403,7 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         update_stats(con, user_id, is_correct)
 
         result = "✅ Верно!" if is_correct else f"❌ Неверно. Правильно: {q_museum}"
-        extra = f"\n\n<b>{q_title}</b>\n<i>{q_artist}</i>, {q_year}\n\n{q_note}" if q_note else ""
+        extra = f"\n\n<b>{q_title}</b>\n<i>{q_artist}</i>, {q_year}\n\n{q_note}"
         try:
             # Меняем подпись у текущего сообщения...
             await query.edit_message_caption(
