@@ -196,6 +196,41 @@ def update_stats(con: sqlite3.Connection, user_id: int, correct: bool):
     """, (user_id, 1 if correct else 0, 1, int(time.time())))
     con.commit()
 
+def leaderboard_rank(user_id: int):
+    """Возвращает (место, всего_участников) в топе за последние 7 дней.
+    Место рассчитывается по правилу сортировки: correct DESC, total ASC, затем user_id ASC.
+    Если пользователя нет в таблице за неделю — вернёт (None, total)."""
+    con = sqlite3.connect(DB_PATH)
+    try:
+        cur = con.cursor()
+        now = int(time.time())
+        week_ago = now - WEEK_WINDOW_DAYS * 86400
+        # Берём показатели пользователя
+        row = cur.execute("""
+            SELECT correct, total FROM leaderboard
+            WHERE user_id=? AND ts >= ?
+        """, (user_id, week_ago)).fetchone()
+        total_users = cur.execute("SELECT COUNT(*) FROM leaderboard WHERE ts >= ?", (week_ago,)).fetchone()[0]
+        if not row:
+            return None, total_users
+        my_correct, my_total = row
+        # Считаем, сколько людей строго выше в порядке сортировки
+        better = cur.execute(
+            """
+            SELECT COUNT(*) FROM leaderboard
+            WHERE ts >= ? AND (
+                correct > ? OR
+                (correct = ? AND total < ?) OR
+                (correct = ? AND total = ? AND user_id < ?)
+            )
+            """,
+            (week_ago, my_correct, my_correct, my_total, my_correct, my_total, user_id)
+        ).fetchone()[0]
+        rank = better + 1
+        return rank, total_users
+    finally:
+        con.close()
+
 def leaderboard_top(limit: int = 10):
     con = sqlite3.connect(DB_PATH)
     cur = con.cursor()
@@ -219,10 +254,17 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
         return "Статистика пока пустая. Нажми /play, чтобы начать."
     correct, total = row
     acc = (correct / total * 100) if total else 0.0
+    rank_line = ""
+    try:
+        r, n = leaderboard_rank(user_id)
+        if r is not None and n:
+            rank_line = f"\nМесто в общем зачёте за 7 дней: {r}/{n}"
+    except Exception:
+        rank_line = ""
     return (
         "Твоя статистика за вчерашний день:\n"
-        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)\n"
-        "Нажми /play, чтобы продолжить c новой партией картин"
+        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)" + rank_line
+        "\nНажми /play, чтобы продолжить c новой партией картин."
     )
 
 def _enqueue_tomorrow_stats(user_id: int) -> None:
