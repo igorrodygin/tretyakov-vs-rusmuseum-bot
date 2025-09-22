@@ -222,7 +222,7 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
     return (
         "Твоя статистика за вчерашний день:\n"
         f"Правильных ответов: {correct}/{total} ({acc:.1f}%)\n"
-        "Нажми /play, чтобы продолжить"
+        "Нажми /play, чтобы продолжить c новой партией картин"
     )
 
 def _enqueue_tomorrow_stats(user_id: int) -> None:
