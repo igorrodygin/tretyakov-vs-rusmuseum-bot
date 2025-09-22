@@ -263,7 +263,7 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
         rank_line = ""
     return (
         "Твоя статистика за вчерашний день:\n"
-        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)" + rank_line
+        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)" + rank_line + 
         "\nНажми /play, чтобы продолжить c новой партией картин."
     )
 
