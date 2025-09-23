@@ -309,7 +309,7 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
 
     try:
         hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=3, min_attempts=5)
-        if hp
+        if hp:
             lines = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
             for i, (t, a, y, m, wrong, tot, err) in enumerate(hp, 1):
                 lines.append(f"{i}. {t} — {a}, {y} [{m}] • ошибки: {err}% ({wrong}/{tot})")
