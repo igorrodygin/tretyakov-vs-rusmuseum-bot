@@ -123,7 +123,7 @@ def db_init():
             UNIQUE(user_id, stats_date) -- не дублировать одно и то же за день
         )
     """)
-        cur.execute("""
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS painting_results(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
