@@ -18,6 +18,7 @@ DB_PATH = os.environ.get("DB_PATH", "bot.sqlite3")
 VALID_MUSEUMS = {"Русский музей", "Третьяковская галерея"}
 WEEK_WINDOW_DAYS = 7
 DAILY_LIMIT = 16  # дневной лимит показов карточек на пользователя
+DIFFICULT_WINDOW_DAYS = 3  # окно для топ-сложных картин в днях
 
 PAINTINGS = None
 
@@ -120,6 +121,18 @@ def db_init():
             send_at INTEGER NOT NULL,   -- unix epoch (UTC) когда отправить
             sent_at INTEGER,            -- unix epoch когда фактически отправили
             UNIQUE(user_id, stats_date) -- не дублировать одно и то же за день
+        )
+    """)
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS painting_results(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            artist TEXT NOT NULL,
+            year TEXT NOT NULL,
+            museum TEXT NOT NULL,
+            is_correct INTEGER NOT NULL,
+            ts INTEGER NOT NULL
         )
     """)
     con.commit()
@@ -248,6 +261,37 @@ def leaderboard_top(limit: int = 10):
     con.close()
     return rows
 
+def hardest_paintings_window(days: int = DIFFICULT_WINDOW_DAYS, limit: int = 1, min_attempts: int = 2):
+    """Топ самых сложных картин за последние days дней.
+    Возвращает список кортежей: (title, artist, year, museum, wrong, total, err_pct)
+    where err_pct is percentage of wrong answers."""
+    cutoff = int(time.time()) - days * 86400
+    con = sqlite3.connect(DB_PATH)
+    try:
+        cur = con.cursor()
+        rows = cur.execute(
+            """
+            SELECT
+              title,
+              artist,
+              year,
+              museum,
+              SUM(CASE WHEN is_correct=0 THEN 1 ELSE 0 END) AS wrong,
+              COUNT(*) AS total,
+              ROUND(100.0 * SUM(CASE WHEN is_correct=0 THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0), 1) AS err_pct
+            FROM painting_results
+            WHERE ts >= ?
+            GROUP BY title, artist, year, museum
+            HAVING total >= ?
+            ORDER BY (1.0 * wrong / total) DESC, total DESC
+            LIMIT ?
+            """,
+            (cutoff, min_attempts, limit)
+        ).fetchall()
+        return rows
+    finally:
+        con.close()
+
 def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
     row = con.execute("SELECT correct, total FROM stats WHERE user_id=?", (user_id,)).fetchone()
     if not row:
@@ -261,10 +305,23 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
             rank_line = f"\nМесто в общем зачёте за 7 дней: {r}/{n}"
     except Exception:
         rank_line = ""
+            # Добавляем топ-3 самых сложных картин за последние N дней
+
+    try:
+        hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=3, min_attempts=5)
+        if hp
+            lines = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
+            for i, (t, a, y, m, wrong, tot, err) in enumerate(hp, 1):
+                lines.append(f"{i}. {t} — {a}, {y} [{m}] • ошибки: {err}% ({wrong}/{tot})")
+            extra_hard = "\n".join(lines)
+        else:
+            extra_hard = ""
+    except Exception:
+        extra_hard = ""
     return (
-        "Твоя статистика за вчерашний день:\n"
-        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)" + rank_line + 
-        "\nНажми /play, чтобы продолжить c новой партией картин."
+        "Твоя статистика за вчерашний день:\n\n"
+        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)" + rank_line + extra_hard +
+        "\n\nНажми /play, чтобы продолжить играть."
     )
 
 def _enqueue_tomorrow_stats(user_id: int) -> None:
@@ -444,7 +501,15 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         q_title, q_artist, q_year, q_museum, q_image_url, q_note = row
         is_correct = (chosen == q_museum)
         update_stats(con, user_id, is_correct)
-
+        # Логируем ответ пользователя для окна N дней
+        con.execute(
+            """
+            INSERT INTO painting_results(user_id, title, artist, year, museum, is_correct, ts)
+            VALUES(?,?,?,?,?,?,?)
+            """,
+            (user_id, q_title, q_artist, q_year, q_museum, 1 if is_correct else 0, int(time.time()))
+        )
+        con.commit()
         result = "✅ Верно!" if is_correct else f"❌ Неверно. Правильно: {q_museum}"
         extra = f"\n\n<b>{q_title}</b>\n<i>{q_artist}</i>, {q_year}\n\n{q_note}"
         try:
