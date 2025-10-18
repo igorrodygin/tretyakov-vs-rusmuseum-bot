@@ -18,7 +18,7 @@ DB_PATH = os.environ.get("DB_PATH", "bot.sqlite3")
 VALID_MUSEUMS = {"Русский музей", "Третьяковская галерея"}
 WEEK_WINDOW_DAYS = 7
 DAILY_LIMIT = 16  # дневной лимит показов карточек на пользователя
-DIFFICULT_WINDOW_DAYS = 3  # окно для топ-сложных картин в днях
+DIFFICULT_WINDOW_DAYS = 1  # окно для топ-сложных картин в днях
 
 PAINTINGS = None
 
@@ -308,7 +308,7 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
             # Добавляем топ-3 самых сложных картин за последние N дней
 
     try:
-        hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=3, min_attempts=5)
+        hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
         if hp:
             lines = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
             for i, (t, a, y, m, wrong, tot, err) in enumerate(hp, 1):
