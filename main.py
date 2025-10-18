@@ -341,12 +341,12 @@ def _enqueue_tomorrow_stats(user_id: int) -> None:
 
 # -------------------- Deck (no-repeat, fixed order for all users) --------------------
 
-_rng = random.SystemRandom()
+_rng = random.Random(0327432)
 
 def _new_deck(n: int):
     deck = list(range(n))
     # IMPORTANT: keep the SAME global order for every user — do NOT shuffle
-    # _rng.shuffle(deck)
+    _rng.shuffle(deck)
     return deck
 
 def _load_deck(con: sqlite3.Connection, user_id: int):
