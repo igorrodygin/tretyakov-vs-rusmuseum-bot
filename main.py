@@ -341,7 +341,7 @@ def _enqueue_tomorrow_stats(user_id: int) -> None:
 
 # -------------------- Deck (no-repeat, fixed order for all users) --------------------
 
-_rng = random.Random(0327432)
+_rng = random.Random(327432)
 
 def _new_deck(n: int):
     deck = list(range(n))
