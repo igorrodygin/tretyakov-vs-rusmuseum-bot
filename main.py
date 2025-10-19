@@ -304,6 +304,7 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
     correct, total = row
     acc = (correct / total * 100) if total else 0.0
     rank_line = ""
+    extra_hard = ""
     try:
         r, n = leaderboard_rank(user_id)
         if r is not None and n:
@@ -312,17 +313,15 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
         rank_line = ""
             # Добавляем топ-3 самых сложных картин за последние N дней
 
-    try:
-        hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
-        if hp:
-            lines = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
-            for i, (t, a, y, m, u, wrong, tot, err) in enumerate(hp, 1):
-                lines.append(f"{i}. {t} — {a}, {y} [{m}] • ошибки: {err}% ({wrong}/{tot}\nURL: {u})")
-            extra_hard = "\n".join(lines)
-        else:
-            extra_hard = ""
-    except Exception:
-        extra_hard = ""
+        # hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
+        # if hp:
+        #     lines = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
+        #     for i, (t, a, y, m, u, wrong, tot, err) in enumerate(hp, 1):
+        #         lines.append(f"{i}. {t} — {a}, {y} [{m}] • ошибки: {err}% ({wrong}/{tot}\nURL: {u})")
+        #     extra_hard = "\n".join(lines)
+        # else:
+        #     extra_hard = ""
+    #except Exception:
     return (
         "Твоя статистика за вчерашний день:\n\n"
         f"Правильных ответов: {correct}/{total} ({acc:.1f}%)" + rank_line + extra_hard +
@@ -564,6 +563,21 @@ async def _send_due_stats_job(context: ContextTypes.DEFAULT_TYPE):
         ).fetchall()
         for q_id, user_id, payload in rows:
             try:
+                    try:
+                        hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
+                        extra_hard_caption = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
+                        for i, (title, artist, year, museum, image_url, wrong, total, err_pct) in enumerate(hp, 1):
+                            if not image_url:
+                                continue
+                            extra_hard.append(
+                                f"{i}. <b>{title}</b>\n"
+                                f"{artist}, {year}\n"
+                                f"<i>{museum}</i>\n"
+                                f"Ошибки: {err_pct}% ({wrong}/{total})"
+                                )
+                            await context.bot.send_photo(chat_id=user_id, photo=image_url, caption=extra_hard_caption, parse_mode=ParseMode.HTML)
+                    except Exception:
+                        pass
                 await context.bot.send_message(chat_id=user_id, text=payload)
                 con.execute("UPDATE stats_queue SET sent_at=? WHERE id=?", (now_ts, q_id))
                 con.commit()
