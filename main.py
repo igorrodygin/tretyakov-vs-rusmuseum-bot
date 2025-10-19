@@ -11,8 +11,8 @@ from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import Application, ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
-if os.path.exists("bot.sqlite3"):
-    os.remove("bot.sqlite3")
+#if os.path.exists("bot.sqlite3"):
+#    os.remove("bot.sqlite3")
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 DATA_PATH = os.environ.get("DATA_PATH", "data/paintings.json")
