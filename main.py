@@ -11,13 +11,16 @@ from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import Application, ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
+if os.path.exists("bot.sqlite3"):
+    os.remove("bot.sqlite3")
+
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 DATA_PATH = os.environ.get("DATA_PATH", "data/paintings.json")
 DB_PATH = os.environ.get("DB_PATH", "bot.sqlite3")
 
 VALID_MUSEUMS = {"Русский музей", "Третьяковская галерея"}
 WEEK_WINDOW_DAYS = 7
-DAILY_LIMIT = 16  # дневной лимит показов карточек на пользователя
+DAILY_LIMIT = 10  # дневной лимит показов карточек на пользователя
 DIFFICULT_WINDOW_DAYS = 1  # окно для топ-сложных картин в днях
 
 PAINTINGS = None
@@ -131,6 +134,7 @@ def db_init():
             artist TEXT NOT NULL,
             year TEXT NOT NULL,
             museum TEXT NOT NULL,
+            image_url TEXT NOT NULL,
             is_correct INTEGER NOT NULL,
             ts INTEGER NOT NULL
         )
@@ -263,7 +267,7 @@ def leaderboard_top(limit: int = 10):
 
 def hardest_paintings_window(days: int = DIFFICULT_WINDOW_DAYS, limit: int = 1, min_attempts: int = 2):
     """Топ самых сложных картин за последние days дней.
-    Возвращает список кортежей: (title, artist, year, museum, wrong, total, err_pct)
+    Возвращает список кортежей: (title, artist, year, museum, image_url, wrong, total, err_pct)
     where err_pct is percentage of wrong answers."""
     cutoff = int(time.time()) - days * 86400
     con = sqlite3.connect(DB_PATH)
@@ -276,12 +280,13 @@ def hardest_paintings_window(days: int = DIFFICULT_WINDOW_DAYS, limit: int = 1, 
               artist,
               year,
               museum,
+              image_url,
               SUM(CASE WHEN is_correct=0 THEN 1 ELSE 0 END) AS wrong,
               COUNT(*) AS total,
               ROUND(100.0 * SUM(CASE WHEN is_correct=0 THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0), 1) AS err_pct
             FROM painting_results
             WHERE ts >= ?
-            GROUP BY title, artist, year, museum
+            GROUP BY title, artist, year, museum, image_url
             HAVING total >= ?
             ORDER BY (1.0 * wrong / total) DESC, total DESC
             LIMIT ?
@@ -311,8 +316,8 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
         hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
         if hp:
             lines = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
-            for i, (t, a, y, m, wrong, tot, err) in enumerate(hp, 1):
-                lines.append(f"{i}. {t} — {a}, {y} [{m}] • ошибки: {err}% ({wrong}/{tot})")
+            for i, (t, a, y, m, u, wrong, tot, err) in enumerate(hp, 1):
+                lines.append(f"{i}. {t} — {a}, {y} [{m}] • ошибки: {err}% ({wrong}/{tot}\nURL: {u})")
             extra_hard = "\n".join(lines)
         else:
             extra_hard = ""
@@ -504,10 +509,10 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Логируем ответ пользователя для окна N дней
         con.execute(
             """
-            INSERT INTO painting_results(user_id, title, artist, year, museum, is_correct, ts)
-            VALUES(?,?,?,?,?,?,?)
+            INSERT INTO painting_results(user_id, title, artist, year, museum, image_url, is_correct, ts)
+            VALUES(?,?,?,?,?,?,?,?)
             """,
-            (user_id, q_title, q_artist, q_year, q_museum, 1 if is_correct else 0, int(time.time()))
+            (user_id, q_title, q_artist, q_year, q_museum, q_image_url, 1 if is_correct else 0, int(time.time()))
         )
         con.commit()
         result = "✅ Верно!" if is_correct else f"❌ Неверно. Правильно: {q_museum}"
