@@ -587,6 +587,63 @@ async def _send_due_stats_job(context: ContextTypes.DEFAULT_TYPE):
     finally:
         con.close()
 
+async def _send_stats_immediately_for_user(context: ContextTypes.DEFAULT_TYPE, user_id: int):
+    """Send yesterday's stats + hardest picture(s) right now, without using stats_queue."""
+    # 1) Try to send the hardest picture(s), exactly like your fixed job does
+    try:
+        hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
+        if hp:
+            await context.bot.send_message(chat_id=user_id, text="🤯 Самая сложная картина за вчерашний день:")
+            for i, (title, artist, year, museum, image_url, wrong, total, err_pct) in enumerate(hp, 1):
+                if not image_url:
+                    continue
+                caption = (
+                    f"{i}. <b>{title}</b>\n"
+                    f"{artist}, {year}\n"
+                    f"<i>{museum}</i>\n"
+                    f"Ошибки: {err_pct}% ({wrong}/{total})"
+                )
+                await context.bot.send_photo(
+                    chat_id=user_id,
+                    photo=image_url,
+                    caption=caption,
+                    parse_mode=ParseMode.HTML
+                )
+    except Exception as e:
+        # Don't block the text stats if images fail
+        print(f"[warn] hardest images (immediate) failed: {e}")
+
+    # 2) Build yesterday's payload the same way your daily job would
+    yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).date().isoformat()
+    try:
+        con = sqlite3.connect(DB_PATH)
+        # Assumes you already have this helper in your code
+        payload = _format_stats_payload(con, user_id, stats_date=yesterday)
+        con.close()
+    except NameError:
+        # Fallback if _format_stats_payload signature differs: send a minimal text summary
+        con = sqlite3.connect(DB_PATH)
+        cur = con.cursor()
+        row = cur.execute("SELECT correct, total FROM stats WHERE user_id=?", (user_id,)).fetchone()
+        con.close()
+        if row:
+            correct, total = row
+            acc = (correct / total * 100) if total else 0.0
+            payload = f"🏁 Статистика за {yesterday}:\nПравильных: {correct}/{total} ({acc:.1f}%)"
+        else:
+            payload = f"На {yesterday} статистика пустая. Нажми /play, чтобы начать."
+
+    # 3) Send the payload
+    try:
+        await context.bot.send_message(chat_id=user_id, text=payload, parse_mode=ParseMode.HTML)
+    except Exception:
+        await context.bot.send_message(chat_id=user_id, text=payload)
+
+async def statsnow(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Immediate next-day-style stats for the current user, no queue or DB inserts."""
+    user_id = update.effective_user.id
+    await _send_stats_immediately_for_user(context, user_id)
+
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     rows = leaderboard_top()
     if not rows:
@@ -618,13 +675,14 @@ def main():
     app.add_handler(CommandHandler("play", play))
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
+    app.add_handler(CommandHandler("statsnow", statsnow))
     app.add_handler(CallbackQueryHandler(on_callback))
 
-    ## Каждую минуту проверяем, нет ли отложенных статистик для отправки
-    #app.job_queue.run_repeating(_send_due_stats_job, interval=60, first=10)
+    # Каждую минуту проверяем, нет ли отложенных статистик для отправки
+    app.job_queue.run_repeating(_send_due_stats_job, interval=60, first=10)
 
     # after building `application`
-    app.job_queue.run_once(_send_due_stats_job, when=5)  # fire in 5 seconds
+    #app.job_queue.run_once(_send_due_stats_job, when=5)  # fire in 5 seconds
 
     app.run_polling(close_loop=False)
 
