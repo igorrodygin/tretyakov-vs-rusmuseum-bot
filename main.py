@@ -565,11 +565,11 @@ async def _send_due_stats_job(context: ContextTypes.DEFAULT_TYPE):
             try:
                 try:
                     hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
-                    extra_hard_caption = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
+                    extra_hard_caption = "🤯 Самая сложная картина за вчерашний день:"
                     for i, (title, artist, year, museum, image_url, wrong, total, err_pct) in enumerate(hp, 1):
                         if not image_url:
                             continue
-                        extra_hard.append(
+                        extra_hard_caption.append(
                             f"{i}. <b>{title}</b>\n"
                             f"{artist}, {year}\n"
                             f"<i>{museum}</i>\n"
@@ -620,8 +620,11 @@ def main():
     app.add_handler(CommandHandler("top", top))
     app.add_handler(CallbackQueryHandler(on_callback))
 
-    # Каждую минуту проверяем, нет ли отложенных статистик для отправки
-    app.job_queue.run_repeating(_send_due_stats_job, interval=60, first=10)
+    ## Каждую минуту проверяем, нет ли отложенных статистик для отправки
+    #app.job_queue.run_repeating(_send_due_stats_job, interval=60, first=10)
+
+    # after building `application`
+    app.job_queue.run_once(_send_due_stats_job, when=5)  # fire in 5 seconds
 
     app.run_polling(close_loop=False)
 
