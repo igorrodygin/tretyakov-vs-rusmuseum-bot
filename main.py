@@ -9,7 +9,8 @@ from datetime import datetime, timezone, timedelta
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, InputMediaPhoto
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
-from telegram.ext import Application, ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import Application, ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes, \
+    CallbackContext, ExtBot
 
 #if os.path.exists("bot.sqlite3"):
 #    os.remove("bot.sqlite3")
@@ -304,27 +305,15 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
     correct, total = row
     acc = (correct / total * 100) if total else 0.0
     rank_line = ""
-    extra_hard = ""
     try:
         r, n = leaderboard_rank(user_id)
         if r is not None and n:
             rank_line = f"\nМесто в общем зачёте за 7 дней: {r}/{n}"
     except Exception:
         rank_line = ""
-            # Добавляем топ-3 самых сложных картин за последние N дней
-
-        # hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
-        # if hp:
-        #     lines = ["", "🤯 Самая сложная картина за вчерашний день:".format(d=DIFFICULT_WINDOW_DAYS)]
-        #     for i, (t, a, y, m, u, wrong, tot, err) in enumerate(hp, 1):
-        #         lines.append(f"{i}. {t} — {a}, {y} [{m}] • ошибки: {err}% ({wrong}/{tot}\nURL: {u})")
-        #     extra_hard = "\n".join(lines)
-        # else:
-        #     extra_hard = ""
-    #except Exception:
     return (
         "Твоя статистика за вчерашний день:\n\n"
-        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)" + rank_line + extra_hard +
+        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)" + rank_line +
         "\n\nНажми /play, чтобы продолжить играть."
     )
 
@@ -564,18 +553,7 @@ async def _send_due_stats_job(context: ContextTypes.DEFAULT_TYPE):
         for q_id, user_id, payload in rows:
             try:
                 try:
-                    hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
-                    extra_hard_caption = "🤯 Самая сложная картина за вчерашний день:"
-                    for i, (title, artist, year, museum, image_url, wrong, total, err_pct) in enumerate(hp, 1):
-                        if not image_url:
-                            continue
-                        extra_hard_caption.append(
-                            f"{i}. <b>{title}</b>\n"
-                            f"{artist}, {year}\n"
-                            f"<i>{museum}</i>\n"
-                            f"Ошибки: {err_pct}% ({wrong}/{total})"
-                            )
-                        await context.bot.send_photo(chat_id=user_id, photo=image_url, caption=extra_hard_caption, parse_mode=ParseMode.HTML)
+                    await _prepare_hardest_picture_stat(context, user_id)
                 except Exception:
                     pass
                 await context.bot.send_message(chat_id=user_id, text=payload)
@@ -591,24 +569,7 @@ async def _send_stats_immediately_for_user(context: ContextTypes.DEFAULT_TYPE, u
     """Send yesterday's stats + hardest picture(s) right now, without using stats_queue."""
     # 1) Try to send the hardest picture(s), exactly like your fixed job does
     try:
-        hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
-        if hp:
-            await context.bot.send_message(chat_id=user_id, text="🤯 Самая сложная картина за вчерашний день:")
-            for i, (title, artist, year, museum, image_url, wrong, total, err_pct) in enumerate(hp, 1):
-                if not image_url:
-                    continue
-                caption = (
-                    f"{i}. <b>{title}</b>\n"
-                    f"{artist}, {year}\n"
-                    f"<i>{museum}</i>\n"
-                    f"Ошибки: {err_pct}% ({wrong}/{total})"
-                )
-                await context.bot.send_photo(
-                    chat_id=user_id,
-                    photo=image_url,
-                    caption=caption,
-                    parse_mode=ParseMode.HTML
-                )
+        await _prepare_hardest_picture_stat(context, user_id)
     except Exception as e:
         # Don't block the text stats if images fail
         print(f"[warn] hardest images (immediate) failed: {e}")
@@ -638,6 +599,27 @@ async def _send_stats_immediately_for_user(context: ContextTypes.DEFAULT_TYPE, u
         await context.bot.send_message(chat_id=user_id, text=payload, parse_mode=ParseMode.HTML)
     except Exception:
         await context.bot.send_message(chat_id=user_id, text=payload)
+
+async def _prepare_hardest_picture_stat(
+        context: CallbackContext[ExtBot[None], dict[Any, Any], dict[Any, Any], dict[Any, Any]], user_id: int):
+    hp = hardest_paintings_window(days=DIFFICULT_WINDOW_DAYS, limit=1, min_attempts=1)
+    if hp:
+        await context.bot.send_message(chat_id=user_id, text="🤯 Самая сложная картина за вчерашний день:")
+        for i, (title, artist, year, museum, image_url, wrong, total, err_pct) in enumerate(hp, 1):
+            if not image_url:
+                continue
+            caption = (
+                f"{i}. <b>{title}</b>\n"
+                f"{artist}, {year}\n"
+                f"<i>{museum}</i>\n"
+                f"Ошибки: {err_pct}% ({wrong}/{total})"
+            )
+            await context.bot.send_photo(
+                chat_id=user_id,
+                photo=image_url,
+                caption=caption,
+                parse_mode=ParseMode.HTML
+            )
 
 async def statsnow(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Immediate next-day-style stats for the current user, no queue or DB inserts."""
@@ -680,9 +662,6 @@ def main():
 
     # Каждую минуту проверяем, нет ли отложенных статистик для отправки
     app.job_queue.run_repeating(_send_due_stats_job, interval=60, first=10)
-
-    # after building `application`
-    #app.job_queue.run_once(_send_due_stats_job, when=5)  # fire in 5 seconds
 
     app.run_polling(close_loop=False)
 
