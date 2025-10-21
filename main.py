@@ -5,6 +5,7 @@ import time
 import sqlite3
 import asyncio
 from datetime import datetime, timezone, timedelta
+from typing import Any
 
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, InputMediaPhoto
 from telegram.constants import ParseMode
