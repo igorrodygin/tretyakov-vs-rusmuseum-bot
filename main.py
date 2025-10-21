@@ -567,33 +567,20 @@ async def _send_due_stats_job(context: ContextTypes.DEFAULT_TYPE):
         con.close()
 
 async def _send_stats_immediately_for_user(context: ContextTypes.DEFAULT_TYPE, user_id: int):
-    """Send yesterday's stats + hardest picture(s) right now, without using stats_queue."""
-    # 1) Try to send the hardest picture(s), exactly like your fixed job does
+    """Send yesterday-style stats + hardest picture(s) right now, without using stats_queue."""
+    # 1) Try to send the hardest picture(s), like daily job
     try:
         await _prepare_hardest_picture_stat(context, user_id)
     except Exception as e:
-        # Don't block the text stats if images fail
+        # Don't block text stats if images fail
         print(f"[warn] hardest images (immediate) failed: {e}")
 
-    # 2) Build yesterday's payload the same way your daily job would
-    yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).date().isoformat()
+    # 2) Build the payload exactly the same as _format_stats_payload
+    con = sqlite3.connect(DB_PATH)
     try:
-        con = sqlite3.connect(DB_PATH)
-        # Assumes you already have this helper in your code
-        payload = _format_stats_payload(con, user_id, stats_date=yesterday)
+        payload = _format_stats_payload(con, user_id)
+    finally:
         con.close()
-    except NameError:
-        # Fallback if _format_stats_payload signature differs: send a minimal text summary
-        con = sqlite3.connect(DB_PATH)
-        cur = con.cursor()
-        row = cur.execute("SELECT correct, total FROM stats WHERE user_id=?", (user_id,)).fetchone()
-        con.close()
-        if row:
-            correct, total = row
-            acc = (correct / total * 100) if total else 0.0
-            payload = f"🏁 Статистика за {yesterday}:\nПравильных: {correct}/{total} ({acc:.1f}%)"
-        else:
-            payload = f"На {yesterday} статистика пустая. Нажми /play, чтобы начать."
 
     # 3) Send the payload
     try:
