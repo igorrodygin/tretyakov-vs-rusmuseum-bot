@@ -495,12 +495,8 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
     correct, total = row
     acc = (correct / total * 100) if total else 0.0
     return (
-        "Твоя статистика за вчерашний день:
-
-"
-        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)
-
-"
+        "Твоя статистика за вчерашний день:"
+        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)"
         "Нажми /play, чтобы продолжить играть."
     )
 
@@ -1097,11 +1093,8 @@ def answer_keyboard():
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
     text = (
-        "Привет! Это викторина «Третьяковка vs Русский музей».
-
-"
-        "Нажми /play чтобы начать: я покажу картину, а ты угадай, из какого музея она.
-"
+        "Привет! Это викторина «Третьяковка vs Русский музей»."
+        "Нажми /play чтобы начать: я покажу картину, а ты угадай, из какого музея она."
         "Команды: /play, /stats, /top"
     )
     await update.effective_message.reply_text(text)
@@ -1129,10 +1122,7 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             q = cand["painting"]
             caption = (
-                f"🖼 <b>{q['title']}</b>
-{q['artist']}, {q['year']}
-
-"
+                f"🖼 <b>{q['title']}</b>{q['artist']}, {q['year']}"
                 "<i>Из какого музея эта работа?</i>"
             )
 
@@ -1206,12 +1196,7 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             _update_picture_answer_aggregates(con, user_id, resolved_pid, is_correct, now_ts)
 
         result = "✅ Верно!" if is_correct else f"❌ Неверно. Правильно: {q_museum}"
-        extra = f"
-
-<b>{q_title}</b>
-<i>{q_artist}</i>, {q_year}
-
-{q_note}"
+        extra = f"<b>{q_title}</b><i>{q_artist}</i>, {q_year}{q_note}"
 
         try:
             await query.edit_message_caption(
@@ -1242,8 +1227,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         correct, total = row
         acc = (correct / total * 100) if total else 0.0
-        await update.effective_message.reply_text(f"Твоя статистика:
-Правильных ответов: {correct}/{total} ({acc:.1f}%)")
+        await update.effective_message.reply_text(f"Твоя статистика: Правильных ответов: {correct}/{total} ({acc:.1f}%)")
     finally:
         con.close()
 
@@ -1263,8 +1247,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
             who = " ".join(parts) if parts else f"id:{user_id}"
         acc = (correct / total * 100) if total else 0.0
         lines.append(f"{idx}. {who}: {correct}/{total} ({acc:.1f}%)")
-    await update.effective_message.reply_text("
-".join(lines))
+    await update.effective_message.reply_text("".join(lines))
 
 
 # -------------------- Scheduled stats sending --------------------
@@ -1277,11 +1260,8 @@ async def _prepare_hardest_picture_stat(context: ContextTypes.DEFAULT_TYPE, user
     media = []
     for idx, (title, artist, year, museum, image_url, wrong, total, pct) in enumerate(hardest, 1):
         cap = (
-            f"🔥 Сложная картина #{idx} за последние {DIFFICULT_WINDOW_DAYS} дн.
-"
-            f"<b>{title}</b>
-<i>{artist}</i>, {year}
-"
+            f"🔥 Сложная картина #{idx} за последние {DIFFICULT_WINDOW_DAYS} дн."
+            f"<b>{title}</b><i>{artist}</i>, {year}"
             f"Ошибок: {wrong}/{total} ({pct:.1f}%)"
         )
         media.append(InputMediaPhoto(media=image_url, caption=cap, parse_mode=ParseMode.HTML))
@@ -1291,11 +1271,8 @@ async def _prepare_hardest_picture_stat(context: ContextTypes.DEFAULT_TYPE, user
     except Exception:
         for (title, artist, year, museum, image_url, wrong, total, pct) in hardest:
             cap = (
-                f"🔥 Сложная картина за последние {DIFFICULT_WINDOW_DAYS} дн.
-"
-                f"<b>{title}</b>
-<i>{artist}</i>, {year}
-"
+                f"🔥 Сложная картина за последние {DIFFICULT_WINDOW_DAYS} дн."
+                f"<b>{title}</b><i>{artist}</i>, {year}"
                 f"Ошибок: {wrong}/{total} ({pct:.1f}%)"
             )
             try:
