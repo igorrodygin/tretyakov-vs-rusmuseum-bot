@@ -495,8 +495,8 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
     correct, total = row
     acc = (correct / total * 100) if total else 0.0
     return (
-        "Твоя статистика за вчерашний день:"
-        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)"
+        "Твоя статистика за вчерашний день:\n"
+        f"Правильных ответов: {correct}/{total} ({acc:.1f}%)\n"
         "Нажми /play, чтобы продолжить играть."
     )
 
@@ -523,8 +523,10 @@ def _enqueue_tomorrow_stats(user_id: int) -> None:
 # -------------------- Option A: global daily plan + cycles --------------------
 
 def _daily_seed(day_key: str) -> int:
+    # SQLite INTEGER is signed 64-bit. Our HMAC-derived 8 bytes are unsigned 64-bit,
+    # so we clamp to 63 bits to avoid occasional OverflowError on insert.
     d = hmac.new(GLOBAL_PLAN_SECRET.encode("utf-8"), day_key.encode("utf-8"), hashlib.sha256).digest()
-    return int.from_bytes(d[:8], "big", signed=False)
+    return int.from_bytes(d[:8], "big", signed=False) & 0x7FFFFFFFFFFFFFFF
 
 
 def _is_global_ready(con: sqlite3.Connection) -> bool:
@@ -1093,8 +1095,8 @@ def answer_keyboard():
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ensure_user(update)
     text = (
-        "Привет! Это викторина «Третьяковка vs Русский музей»."
-        "Нажми /play чтобы начать: я покажу картину, а ты угадай, из какого музея она."
+        "Привет! Это викторина «Третьяковка vs Русский музей».\n"
+        "Нажми /play чтобы начать: я покажу картину, а ты угадай, из какого музея она.\n"
         "Команды: /play, /stats, /top"
     )
     await update.effective_message.reply_text(text)
@@ -1122,7 +1124,7 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             q = cand["painting"]
             caption = (
-                f"🖼 <b>{q['title']}</b>{q['artist']}, {q['year']}"
+                f"🖼 <b>{q['title']}</b>{q['artist']}, {q['year']}\n"
                 "<i>Из какого музея эта работа?</i>"
             )
 
@@ -1227,7 +1229,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         correct, total = row
         acc = (correct / total * 100) if total else 0.0
-        await update.effective_message.reply_text(f"Твоя статистика: Правильных ответов: {correct}/{total} ({acc:.1f}%)")
+        await update.effective_message.reply_text(f"Твоя статистика:\n Правильных ответов: {correct}/{total} ({acc:.1f}%)")
     finally:
         con.close()
 
@@ -1260,8 +1262,8 @@ async def _prepare_hardest_picture_stat(context: ContextTypes.DEFAULT_TYPE, user
     media = []
     for idx, (title, artist, year, museum, image_url, wrong, total, pct) in enumerate(hardest, 1):
         cap = (
-            f"🔥 Сложная картина #{idx} за последние {DIFFICULT_WINDOW_DAYS} дн."
-            f"<b>{title}</b><i>{artist}</i>, {year}"
+            f"🔥 Сложная картина #{idx} за последние {DIFFICULT_WINDOW_DAYS} дн.\n"
+            f"<b>{title}</b><i>{artist}</i>, {year}\n"
             f"Ошибок: {wrong}/{total} ({pct:.1f}%)"
         )
         media.append(InputMediaPhoto(media=image_url, caption=cap, parse_mode=ParseMode.HTML))
@@ -1271,8 +1273,8 @@ async def _prepare_hardest_picture_stat(context: ContextTypes.DEFAULT_TYPE, user
     except Exception:
         for (title, artist, year, museum, image_url, wrong, total, pct) in hardest:
             cap = (
-                f"🔥 Сложная картина за последние {DIFFICULT_WINDOW_DAYS} дн."
-                f"<b>{title}</b><i>{artist}</i>, {year}"
+                f"🔥 Сложная картина за последние {DIFFICULT_WINDOW_DAYS} дн.\n"
+                f"<b>{title}</b><i>{artist}</i>, {year}\n"
                 f"Ошибок: {wrong}/{total} ({pct:.1f}%)"
             )
             try:
