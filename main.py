@@ -1124,7 +1124,7 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             q = cand["painting"]
             caption = (
-                f"🖼 <b>{q['title']}</b>{q['artist']}, {q['year']}\n"
+                f"🖼 <b>{q['title']}</b>, {q['artist']}, {q['year']}\n"
                 "<i>Из какого музея эта работа?</i>"
             )
 
@@ -1197,8 +1197,8 @@ async def on_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if resolved_pid:
             _update_picture_answer_aggregates(con, user_id, resolved_pid, is_correct, now_ts)
 
-        result = "✅ Верно!" if is_correct else f"❌ Неверно. Правильно: {q_museum}"
-        extra = f"<b>{q_title}</b><i>{q_artist}</i>, {q_year}{q_note}"
+        result = "✅ Верно!\n" if is_correct else f"❌ Неверно. Правильно: {q_museum}\n"
+        extra = f"<b>{q_title}</b>, <i>{q_artist}</i>, {q_year}{q_note}"
 
         try:
             await query.edit_message_caption(
