@@ -1240,7 +1240,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.reply_text("Пока нет результатов за последние 7 дней.")
         return
 
-    lines = ["🏆 Топ за 7 дней:"]
+    lines = ["🏆 Топ за 7 дней:\n"]
     for idx, (user_id, correct, total, username, first_name, last_name) in enumerate(rows, 1):
         if username:
             who = f"@{username}"
