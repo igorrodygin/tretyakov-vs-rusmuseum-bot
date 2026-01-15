@@ -1248,7 +1248,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parts = [x for x in [first_name, last_name] if x]
             who = " ".join(parts) if parts else f"id:{user_id}"
         acc = (correct / total * 100) if total else 0.0
-        lines.append(f"{idx}. {who}: {correct}/{total} ({acc:.1f}%)")
+        lines.append(f"{idx}. {who}: {correct}/{total} ({acc:.1f}%)\n")
     await update.effective_message.reply_text("".join(lines))
 
 
