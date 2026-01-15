@@ -1259,6 +1259,14 @@ async def _prepare_hardest_picture_stat(context: ContextTypes.DEFAULT_TYPE, user
     if not hardest:
         return
 
+    # Intro text message (requested)
+    try:
+        await context.bot.send_message(
+            chat_id = user_id,
+            text = "\nТе самые шедевры, которые почти никто не угадал.\n",
+        )
+    except Exception:
+        pass
     media = []
     for idx, (title, artist, year, museum, image_url, wrong, total, pct) in enumerate(hardest, 1):
         cap = (
