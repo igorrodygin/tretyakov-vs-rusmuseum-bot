@@ -495,7 +495,7 @@ def _format_stats_payload(con: sqlite3.Connection, user_id: int) -> str:
     correct, total = row
     acc = (correct / total * 100) if total else 0.0
     return (
-        "Твоя статистика за вчерашний день:\n"
+        "Твоя текущая статистика:\n"
         f"Правильных ответов: {correct}/{total} ({acc:.1f}%)\n"
         "Нажми /play, чтобы продолжить играть."
     )
@@ -1262,34 +1262,39 @@ async def _prepare_hardest_picture_stat(context: ContextTypes.DEFAULT_TYPE, user
     # Intro text message (requested)
     try:
         await context.bot.send_message(
-            chat_id = user_id,
-            text = "\nТе самые шедевры, которые почти никто не угадал.\n",
+            chat_id=user_id,
+            text="\nТе самые шедевры, которые почти никто не угадал.\n",
         )
     except Exception:
         pass
-    media = []
+
+    # Send each painting as a separate message (not an album)
     for idx, (title, artist, year, museum, image_url, wrong, total, pct) in enumerate(hardest, 1):
         cap = (
             f"🔥 Сложная картина #{idx} за последние {DIFFICULT_WINDOW_DAYS} дн.\n"
             f"<b>{title}</b><i>{artist}</i>, {year}\n"
+            f"Музей: {museum}\n"
             f"Ошибок: {wrong}/{total} ({pct:.1f}%)"
         )
-        media.append(InputMediaPhoto(media=image_url, caption=cap, parse_mode=ParseMode.HTML))
 
-    try:
-        await context.bot.send_media_group(chat_id=user_id, media=media)
-    except Exception:
-        for (title, artist, year, museum, image_url, wrong, total, pct) in hardest:
-            cap = (
-                f"🔥 Сложная картина за последние {DIFFICULT_WINDOW_DAYS} дн.\n"
-                f"<b>{title}</b><i>{artist}</i>, {year}\n"
-                f"Ошибок: {wrong}/{total} ({pct:.1f}%)"
+        try:
+            await context.bot.send_photo(
+                chat_id=user_id,
+                photo=image_url,
+                caption=cap,
+                parse_mode=ParseMode.HTML,
             )
+        except Exception:
+            # If sending photo fails, fall back to a text message with the link.
             try:
-                await context.bot.send_photo(chat_id=user_id, photo=image_url, caption=cap, parse_mode=ParseMode.HTML)
+                await context.bot.send_message(
+                    chat_id=user_id,
+                    text=f"{cap}\n{image_url}",
+                    parse_mode=ParseMode.HTML,
+                    disable_web_page_preview=False,
+                )
             except Exception:
                 pass
-
 
 async def _send_due_stats_job(context: ContextTypes.DEFAULT_TYPE):
     now_ts = int(time.time())
