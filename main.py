@@ -1271,9 +1271,9 @@ async def _prepare_hardest_picture_stat(context: ContextTypes.DEFAULT_TYPE, user
     # Send each painting as a separate message (not an album)
     for idx, (title, artist, year, museum, image_url, wrong, total, pct) in enumerate(hardest, 1):
         cap = (
-            f"🔥 Сложная картина #{idx} за последние {DIFFICULT_WINDOW_DAYS} дн.\n"
-            f"<b>{title}</b><i>{artist}</i>, {year}\n"
-            f"Музей: {museum}\n"
+            f"🔥 Сложная картина #{idx} за последний день\n"
+            f"<b>{title}</b>, <i>{artist}</i>, {year}\n"
+            f"{museum}\n"
             f"Ошибок: {wrong}/{total} ({pct:.1f}%)"
         )
 
